@@ -1,0 +1,1 @@
+{"version":3,"file":"index.ts","sources":["index.ts"],"sourcesContent":["import r from\"react\";import{View as t}from\"@tarojs/components\";function e(){return r.createElement(t,null,\"表格组件\")}export{e as TaroReactTable};\n//# sourceMappingURL=index.ts.map\n"],"names":["e","r","createElement","t"],"mappings":"+DAA+D,SAASA,IAAI,OAAOC,EAAEC,cAAcC,EAAE,KAAK"}
