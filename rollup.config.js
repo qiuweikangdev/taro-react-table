@@ -3,8 +3,8 @@ import RollupTypescript from 'rollup-plugin-typescript2';
 import postcss from 'rollup-plugin-postcss';
 import less from 'less';
 import RollupDts from 'rollup-plugin-dts';
-
 import { terser } from 'rollup-plugin-terser';
+import pkg from './package.json';
 
 const resolveFile = source => path.resolve(__dirname, source);
 
@@ -34,9 +34,6 @@ const processLess = function(context, payload) {
 
     less.render(context, {}).then(
       function(output) {
-        // output.css = string of css
-        // output.map = string of sourcemap
-        // output.imports = array of string filenames of the imports referenced
         if (output && output.css) {
           resolve(output.css);
         } else {
@@ -50,70 +47,45 @@ const processLess = function(context, payload) {
   });
 };
 
+const plugins = [
+  postcss({
+    extract: true,
+    namedExports: true,
+    minimize: true,
+    process: processLess
+  }),
+  RollupTypescript({
+    tsconfig: resolveFile('tsconfig.json'),
+    useTsconfigDeclarationDir: true
+  })
+];
+
 const config = [
   {
-    input: resolveFile('src/index.ts'),
+    input: resolveFile(pkg.source),
     output: [
       {
-        file: resolveFile('dist/index.js'),
-        format: 'es'
-        // plugins: [terser()]
+        file: resolveFile(pkg.main),
+        format: 'es',
+        plugins: [terser()]
       },
       {
-        file: resolveFile('dist/index.umd.js'),
+        file: resolveFile(pkg.umd),
         format: 'umd',
         name: 'taro-react-table'
       }
     ],
     external: externalPackages,
-    plugins: [
-      postcss({
-        extract: true,
-        namedExports: true,
-        minimize: true,
-        process: processLess
-      }),
-      // RollupTypescript({
-      //   tsconfig: resolveFile('tsconfig.rollup.json')
-      // })
-      RollupTypescript()
-    ]
+    plugins
   }
   // {
-  //   input: resolveFile('src/index.ts'),
+  //   input: resolveFile(pkg.source),
   //   output: {
-  //     file: resolveFile('dist/index.d.ts'),
+  //     file: resolveFile(pkg.types),
   //     format: 'es'
   //   },
-  //   plugins: [RollupDts()]
+  //   // plugins: [postcss(), RollupDts()]
+  //   plugins: [...plugins, RollupDts()]
   // }
 ];
 export default config;
-
-// export default {
-//   input: resolveFile('src/index.ts'),
-//   output: [
-//     {
-//       file: resolveFile('dist/index.d.ts'),
-//       format: 'es'
-//     },
-//     {
-//       file: resolveFile('dist/index.js'),
-//       format: 'es'
-//       // plugins: [terser()]
-//     }
-//   ],
-//   external: externalPackages,
-//   plugins: [
-//     postcss({
-//       extract: true,
-//       // namedExports: true,
-//       minimize: true,
-//       process: processLess
-//     }),
-//     // RollupDts()
-//     RollupTypescript({
-//       tsconfig: resolveFile('tsconfig.rollup.json')
-//     })
-//   ]
-// };

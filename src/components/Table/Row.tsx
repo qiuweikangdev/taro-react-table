@@ -2,13 +2,20 @@ import { memo } from 'react';
 import classNames from 'classnames';
 import { View, Text } from '@tarojs/components';
 import { calculateFixedDistance, getSize } from './utils';
-import { DEFAULTDATA, Columns, RowProps } from './types';
+import { DEFAULTDATA } from './types';
+import { Columns, DataSource } from '.';
 import './index.less';
 
+export type RowProps<T = unknown> = {
+  index: number;
+  dataSourceItem: DataSource<T>;
+  columns: Columns<T>[];
+};
+
 function Row(props: RowProps) {
-  const { dataSourceItem, rowKey, columns, index } = props;
+  const { dataSourceItem, columns, index } = props;
   return (
-    <View key={dataSourceItem[rowKey]} className={classNames('taro-table-row')}>
+    <View className={classNames('taro-table-row')}>
       {columns.map(
         (columnItem: Columns, colIndex: number): JSX.Element => {
           const text = dataSourceItem[columnItem.dataIndex];

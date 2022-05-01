@@ -39,7 +39,7 @@ export default function Demo() {
 
   return (
     <View style={{ padding: '20px' }}>
-      <Table scrollX scrollY dataSource={dataSource} columns={columns}></Table>
+      <Table rowKey='rowKey' dataSource={dataSource} columns={columns}></Table>
     </View>
   );
 }

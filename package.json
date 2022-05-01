@@ -7,8 +7,10 @@
     "typescript": true,
     "css": "less"
   },
+  "source": "src/index.ts",
   "main": "dist/index.js",
-   "types": "dist/types/index.d.ts",
+  "umd": "dist/index.umd.js",
+  "types": "dist/types/index.d.ts",
   "files": [
     "dist",
     "@types"
@@ -32,8 +34,8 @@
     "dev:qq": "npm run build:qq -- --watch",
     "dev:jd": "npm run build:jd -- --watch",
     "dev:quickapp": "npm run build:quickapp -- --watch",
-    "dev:lib": "tsc --project ./tsconfig.json --watch --incremental",
-    "build:lib": "tsc --project ./tsconfig.json --declaration",
+    "dev:type": "tsc --project ./tsconfig.json --watch --incremental",
+    "build:type": "tsc --project ./tsconfig.json --declaration",
     "build:rollup": "rollup --config ./rollup.config.js"
   },
   "browserslist": [
