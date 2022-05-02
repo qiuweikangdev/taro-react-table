@@ -2,7 +2,7 @@ import { memo } from 'react';
 import classNames from 'classnames';
 import { View, Text } from '@tarojs/components';
 import { getSize } from './utils';
-import { DEFAULTDATA } from './types';
+import { DefaultData } from './types';
 import { Columns } from '.';
 
 export type TitleProps = {
@@ -25,7 +25,7 @@ function Title(props: TitleProps) {
         // [column.fixed as string]:
         // column.fixed &&
         // calculateFixedDistance({ fixedType: column.fixed, index, columns }),
-        width: getSize(column.width || DEFAULTDATA.ColWidth),
+        width: getSize(column.width || DefaultData.ColWidth),
         ...column.titleStyle
       }}
       key={column.key || column.dataIndex}

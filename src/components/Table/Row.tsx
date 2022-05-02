@@ -2,7 +2,7 @@ import { memo } from 'react';
 import classNames from 'classnames';
 import { View, Text } from '@tarojs/components';
 import { calculateFixedDistance, getSize } from './utils';
-import { DEFAULTDATA } from './types';
+import { DefaultData } from './types';
 import { Columns, DataSource } from '.';
 import './index.less';
 
@@ -47,7 +47,7 @@ function Row(props: RowProps) {
               })}
               style={{
                 textAlign: columnItem.align || 'center',
-                width: getSize(columnItem.width || DEFAULTDATA.ColWidth),
+                width: getSize(columnItem.width || DefaultData.ColWidth),
                 [columnItem.fixed as string]:
                   columnItem.fixed &&
                   calculateFixedDistance({
