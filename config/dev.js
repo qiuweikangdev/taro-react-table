@@ -5,7 +5,6 @@ module.exports = {
   defineConstants: {},
   mini: {},
   h5: {
-    host: '127.0.0.1'
-    // port: 8888
+    devServer: { port: 8888, host: '127.0.0.1' }
   }
 };

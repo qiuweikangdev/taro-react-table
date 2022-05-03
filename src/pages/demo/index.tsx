@@ -84,7 +84,7 @@ export default function Demo() {
     setLoadStatus('loading');
     const list = await getList();
     setDataSource(list);
-    setLoadStatus(list.length > 30 ? 'noMore' : null);
+    setLoadStatus(list.length > 20 ? 'noMore' : null);
   };
 
   return (
