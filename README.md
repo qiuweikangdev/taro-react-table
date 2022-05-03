@@ -7,9 +7,7 @@
 - 固定表头
 - 滚动上拉加载
 
- ![image](https://github.com/qiuweikangdev/taro-react-table/tree/master/images/demo.gif)
-
-
+![](https://raw.githubusercontent.com/qiuweikangdev/taro-react-table/master/images/demo.gif)
 
 
 # 安装
