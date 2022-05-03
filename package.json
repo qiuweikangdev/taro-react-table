@@ -79,5 +79,9 @@
   },
   "dependencies": {
     "classnames": "^2.3.1"
-  }
+  },
+  "bugs": {
+     "url": "https://github.com/qiuweikangdev/taro-react-table/issues"
+    },
+    "homepage": "https://github.com/qiuweikangdev/taro-react-table#readme"
 }
