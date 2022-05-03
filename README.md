@@ -11,16 +11,16 @@
 
 
 # 安装
-```js
+```bash
 npm install taro-react-table
 ````
 # 引入组件
-```
+```js
 import Table from 'taro-react-table'
 import 'taro-react-table/dist/index.css'
 ```
 # 使用
-```
+```js
 import { useRef, useState } from 'react';
 import { View } from '@tarojs/components';
 import Table from 'taro-react-table'
