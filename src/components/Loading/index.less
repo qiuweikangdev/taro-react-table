@@ -1,15 +1,24 @@
 .loading-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   .loading {
     position: relative;
-    width: 30px;
-    height: 30px;
-    border: 2px solid #000;
+    width: 35px;
+    height: 35px;
+    border: 2px solid #ff2f31;
     border-top-color: rgba(0, 0, 0, 0.2);
     border-right-color: rgba(0, 0, 0, 0.2);
     border-bottom-color: rgba(0, 0, 0, 0.2);
     border-radius: 100%;
-
+    margin: 0px 20px;
     animation: circle infinite 0.75s linear;
+  }
+
+  .loading-text {
+    font-size: 32px;
+    color: #969799;
   }
 }
 

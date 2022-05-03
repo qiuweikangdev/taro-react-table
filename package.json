@@ -7,13 +7,13 @@
     "typescript": true,
     "css": "less"
   },
+  "license": "MIT",
   "source": "src/index.ts",
   "main": "dist/index.js",
   "umd": "dist/index.umd.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist",
-    "@types"
+    "dist"
   ],
   "scripts": {
     "build:weapp": "taro build --type weapp",

@@ -1,68 +1,41 @@
-// {
-//   "compilerOptions": {
-//     "allowSyntheticDefaultImports": true,
-//     "experimentalDecorators": true,
-//     "jsx": "react",
-//     "jsxFactory": "React.createElement",
-//     "moduleResolution": "node",
-//     "noImplicitAny": false,
-//     "noUnusedLocals": true,
-//     "noUnusedParameters": false,
-//     "preserveConstEnums": true,
-//     "skipLibCheck": true,
-//     "sourceMap": true,
-//     "strictNullChecks": true,
-//     "resolveJsonModule": true,
-//     "target": "es5",
-//     "module": "es6",
-//     "downlevelIteration": true,
-//     "baseUrl": ".",
-//     "types": ["node"],
-//   },
-//   "compileOnSave": false,
-//   "exclude": [
-//     "node_modules/*",
-//     "dist/*"
-//   ],
-//   "include": [
-//     "src/**/*"
-//   ]
-// }
 {
   "compilerOptions": {
     "target": "es2018",
     "module": "es2015",
     "declaration": true,
+    "declarationDir": "dist",
+    "outDir": "dist",
     "removeComments": false,
     "preserveConstEnums": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
-    "outDir": "lib",
     "noUnusedLocals": true,
     "skipLibCheck": true,
-    "noUnusedParameters": false, // 有未使用到的函数参数时报错
+    "noUnusedParameters": false,
     "strictNullChecks": true,
     "sourceMap": true,
     "resolveJsonModule": true,
-    "baseUrl": ".",
-    "rootDir": ".",
+    "baseUrl": "src",
+    "rootDir": "src",  // 用来控制输出的目录结构 --outDir。
     "jsx": "react-jsx",
     "typeRoots": [
       "node_modules/@types",
       "global.d.ts"
     ],
-    // "paths": {
-    //   "@/types/*": ["./@types/*"],
-    //   "@/components/*": ["./src/components/*"],
-    //   "@/pages/*": ["./src/pages/*"],
-    // }
+    "paths": {
+      "@/types/*": ["./@types/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/pages/*": ["./src/pages/*"],
+    }
   },
   "compileOnSave": false,
   "exclude": [
-    "node_modules/*",
+    "node_modules/**/*",
     "dist/*",
+    "src/pages/**/*",
+    "src/app.ts",
     "src/app.config.ts"
   ],
   "include": [

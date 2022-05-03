@@ -3,20 +3,36 @@ import {
   memo,
   useEffect,
   useState,
+  useRef,
   forwardRef,
   useImperativeHandle,
   ForwardRefRenderFunction
 } from 'react';
 import classNames from 'classnames';
 
-import { ScrollView, ScrollViewProps, View } from '@tarojs/components';
+import {
+  BaseEventOrig,
+  CommonEventFunction,
+  ScrollView,
+  ScrollViewProps,
+  View
+} from '@tarojs/components';
 import Row from './Row';
 import Title from './Title';
 import Empty from './Empty';
 
 import './index.less';
+import LoadMore from '../LoadMore';
+
+export type ScrollDetail = {
+  scrollLeft: number;
+  scrollTop: number;
+  scrollHeight: number;
+};
 
 export type Fixed = 'left' | 'right';
+
+export type LoadStatus = 'loading' | 'noMore' | null;
 
 export type DataSource<T = unknown> = {
   [prop: string]: T;
@@ -36,10 +52,12 @@ export type Columns<T = unknown> = {
   fixed?: Fixed;
 };
 
-export type TableProps<T = unknown> = ScrollViewProps & {
+export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
   dataSource: T[];
   columns: Columns<T>[];
   rowKey?: string | ((item: T) => React.Key);
+  wrapperClass?: string;
+  wrapperStyle?: CSSProperties;
   className?: string;
   colStyle?: CSSProperties;
   colClassName?: string;
@@ -47,24 +65,43 @@ export type TableProps<T = unknown> = ScrollViewProps & {
   rowClassName?: string;
   titleStyle?: CSSProperties;
   titleClassName?: string;
+  style?: CSSProperties;
   loading?: boolean;
+  loadStatus: LoadStatus;
+  LoadMore?: React.ReactNode;
+  onLoad?: CommonEventFunction;
 };
 
 const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
-  props,
-  ref
-) => {
-  const {
+  {
     columns: pColumns = [],
     dataSource: pDataSource = [],
     rowKey = '',
+    style = {},
     scrollY = true,
     scrollX = true,
-    className = ''
-  } = props;
-
+    rowStyle = {},
+    titleStyle = {},
+    rowClassName = '',
+    titleClassName = '',
+    className = '',
+    wrapperClass = {},
+    wrapperStyle = {},
+    loadStatus: pLoadStatus = null,
+    onLoad,
+    ...props
+  },
+  ref
+) => {
+  const scrollRef = useRef<HTMLElement>(null);
   const [dataSource, setDataSource] = useState<unknown[]>(pDataSource);
   const [columns, setColumns] = useState<Columns[]>(pColumns);
+  const [scrollDetail, setScrollDetail] = useState<Partial<ScrollDetail>>({});
+  const [loadStatus, setLoadStatus] = useState<LoadStatus>(pLoadStatus);
+
+  useEffect(() => {
+    setLoadStatus(pLoadStatus);
+  }, [pLoadStatus]);
 
   useEffect(() => {
     setDataSource(pDataSource);
@@ -73,6 +110,28 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   useEffect(() => {
     setColumns(pColumns);
   }, [pColumns]);
+
+  // 上拉加载
+  const onScrollToLower = e => {
+    const { height = '' } = scrollRef?.current?.style || {};
+    const { scrollHeight = 0, scrollTop = 0 } = scrollDetail;
+    const tableHeight = Number(height.replace('px', ''));
+    props?.onScrollToLower?.(e);
+    if (loadStatus == 'noMore') return; // 无更多数据
+    if (Math.round(scrollHeight) == Math.round(tableHeight)) return; // 无数据
+    const diff = scrollHeight - (scrollTop + tableHeight);
+    if (diff < 30 && loadStatus != 'loading') {
+      setTimeout(() => {
+        onLoad?.(e);
+      }, 400);
+    }
+  };
+
+  const onScroll = (e: BaseEventOrig<ScrollViewProps.onScrollDetail>) => {
+    const { scrollTop, scrollHeight, scrollLeft } = e.detail;
+    setScrollDetail({ scrollTop, scrollHeight, scrollLeft });
+    props?.onScroll?.(e);
+  };
 
   const renderTableHead = () => {
     return (
@@ -132,19 +191,33 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     );
   };
 
-  useImperativeHandle(ref, () => ({}));
+  useImperativeHandle(ref, () => ({ scrollRef }));
 
   return (
-    <View className={classNames(['taro-table-wrapper', className])}>
+    <View
+      className={classNames(['taro-table-wrapper', wrapperClass])}
+      style={wrapperStyle}
+    >
       <ScrollView
-        className='taro-table-scroll'
+        {...props}
+        ref={scrollRef}
+        className={classNames(['taro-table-scroll', classNames])}
         scrollX={scrollX}
         scrollY={scrollY}
-        style={{ height: '200px', overflow: 'auto' }}
+        style={{ ...style, overflow: 'auto' }}
+        onScrollToLower={onScrollToLower}
+        onScroll={onScroll}
       >
         <View>
           {renderTableHead()}
           {renderTableBody()}
+          <View className='taro-table-load-wrapper'>
+            {props?.LoadMore ? (
+              props.LoadMore
+            ) : (
+              <LoadMore status={loadStatus}></LoadMore>
+            )}
+          </View>
         </View>
       </ScrollView>
     </View>
