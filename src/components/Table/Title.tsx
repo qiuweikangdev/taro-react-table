@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { CSSProperties, memo } from 'react';
 import classNames from 'classnames';
 import { View, Text } from '@tarojs/components';
 import { getSize } from './utils';
@@ -9,24 +9,28 @@ export type TitleProps = {
   column: Columns;
   index: number;
   fixed?: boolean;
+  titleStyle?: CSSProperties;
+  titleClassName?: string;
 };
 
 function Title(props: TitleProps) {
-  const { column, index } = props;
+  const { column, index, titleStyle = {}, titleClassName = '' } = props;
   const handleClickTitle = (column, index) => {};
 
   return (
     <View
       onClick={() => handleClickTitle(column, index)}
       className={classNames(['taro-table-title'], {
-        taro3table_fixed: column.fixed
+        taro3table_fixed: column.fixed,
+        [titleClassName]: true
       })}
       style={{
         // [column.fixed as string]:
         // column.fixed &&
         // calculateFixedDistance({ fixedType: column.fixed, index, columns }),
         width: getSize(column.width || DefaultData.ColWidth),
-        ...column.titleStyle
+        ...column.titleStyle,
+        ...titleStyle
       }}
       key={column.key || column.dataIndex}
     >

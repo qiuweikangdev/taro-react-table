@@ -22,6 +22,7 @@ import Title from './Title';
 import Empty from './Empty';
 
 import './index.less';
+import Loading from '../Loading';
 import LoadMore from '../LoadMore';
 
 export type ScrollDetail = {
@@ -81,13 +82,16 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     scrollY = true,
     scrollX = true,
     rowStyle = {},
-    titleStyle = {},
     rowClassName = '',
+    colClassName = '',
+    colStyle = {},
+    titleStyle = {},
     titleClassName = '',
     className = '',
     wrapperClass = {},
     wrapperStyle = {},
     loadStatus: pLoadStatus = null,
+    loading = false,
     onLoad,
     ...props
   },
@@ -176,6 +180,10 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
               }
               return (
                 <Row
+                  rowClassName={rowClassName}
+                  rowStyle={rowStyle}
+                  colClassName={colClassName}
+                  colStyle={colStyle}
                   columns={columns}
                   key={key}
                   dataSourceItem={item}
@@ -198,6 +206,11 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
       className={classNames(['taro-table-wrapper', wrapperClass])}
       style={wrapperStyle}
     >
+      {loading && (
+        <View className='taro-table-loading'>
+          <Loading text={null}></Loading>
+        </View>
+      )}
       <ScrollView
         {...props}
         ref={scrollRef}

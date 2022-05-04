@@ -19,12 +19,54 @@ npm install taro-react-table
 import Table from 'taro-react-table'
 import 'taro-react-table/dist/index.css'
 ```
+
+# 参数说明
+
+## Table
+
+| 参数    |   描述     |  类型 | 必传 | 默认值 |
+| ----- | ---- | ----- | | ----- | ----- |
+| `dataSource` | `数据源` | object[] | 是 | `[]` |
+| `columns` | `表格列的配置描述，具体项见下表` | Columns[] | 是 | `[]` |
+| `rowKey` | `表格行 key 的取值，可以是字符串或一个函数` | string \| function(record): string | 是 | `key` |
+| `wrapperClass` | `外层容器的类名` | string | 否 |  |
+| `wrapperStyle` | `外层容器的样式` | object | 否 |   |
+| `className` | `ScrollView容器类名` | string  |否 | |
+| `style` | `ScrollView容器样式` | object  |否 | |
+| `rowClassName` | `行类名` | string  |否 | |
+| `rowStyle` | `行样式` | object  |否 | |
+| `colClassName` | `单元格类名` | string  |否 | |
+| `colStyle` | `单元格样式` | object  |否 | |
+| `titleStyle` | `标题样式` | object  |否 | |
+| `titleClassName` | `标题类名` | string  |否 | |
+| `titleClassName` | `标题类名` | string  |否 | |
+| `loading` | `是否显示加载` | boolean  |否 | |
+| `loadStatus` | `加载状态` |  loading \| noMore \| null  | 否 | null |
+| `onLoad` | `滚动底部触发，用于上拉加载` |  Function  | 否 |  |
+
+
+## Column
+| 参数    |   描述     |  类型 | 必传 | 默认值 |
+| ----- | ---- | ----- | | ----- | ----- |
+| `title` | `标题` | string | JSX.Element | 是 |  |
+| `dataIndex` | `列数据在数据项中对应的路径` | string | 是 | `[]` |
+| `key` | `表格行 key 的取值，可以是字符串或一个函数` | string \| function(record): string | 否 | `key` |
+| `align` | `设置该列文本对齐方式` | string | 否 | 'center' |
+| `style` | `标题样式` | object | 否 |   |
+| `align` | `外层容器的类名` | string | 否 |  |
+| `className` | `标题类名` | string  |否 | |
+| `render` | `生成复杂数据的渲染函数，参数分别为当前行的值，当前行数据，行索引` | function(text, record, index) {} | 否 |   |
+| `width` | `ScrollView容器类名` | string  |否 | |
+| `fixed` | `固定列` | left \| right | 否 |  |
+
+
 # 使用
+
 ```js
 import { useRef, useState } from 'react';
 import { View } from '@tarojs/components';
-import Table from 'taro-react-table'
-import 'taro-react-table/dist/index.css'
+import Table from 'taro-react-table';
+import 'taro-react-table/dist/index.css';
 
 export default function Demo() {
   const [dataSource, setDataSource] = useState([
@@ -65,7 +107,7 @@ export default function Demo() {
       name4: '幼稚完6'
     }
   ]);
-  const [loadStatus, setLoadStatus] = useState<LoadStatus>(null);
+  const [loadStatus, setLoadStatus] = useState < LoadStatus > null;
 
   const columns = [
     {
@@ -123,5 +165,4 @@ export default function Demo() {
     </View>
   );
 }
-
 ```

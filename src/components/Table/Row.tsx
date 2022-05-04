@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { CSSProperties, memo } from 'react';
 import classNames from 'classnames';
 import { View, Text } from '@tarojs/components';
 import { calculateFixedDistance, getSize } from './utils';
@@ -10,12 +10,27 @@ export type RowProps<T = unknown> = {
   index: number;
   dataSourceItem: DataSource<T>;
   columns: Columns<T>[];
+  rowStyle?: CSSProperties;
+  rowClassName?: string;
+  colStyle?: CSSProperties;
+  colClassName?: string;
 };
 
 function Row(props: RowProps) {
-  const { dataSourceItem, columns, index } = props;
+  const {
+    dataSourceItem,
+    rowStyle = {},
+    rowClassName = '',
+    colClassName = '',
+    colStyle = {},
+    columns,
+    index
+  } = props;
   return (
-    <View className={classNames('taro-table-row')}>
+    <View
+      className={classNames(['taro-table-row', rowClassName])}
+      style={rowStyle}
+    >
       {columns.map(
         (columnItem: Columns, colIndex: number): JSX.Element => {
           const text = dataSourceItem[columnItem.dataIndex];
@@ -43,7 +58,8 @@ function Row(props: RowProps) {
             <View
               key={columnItem.key || columnItem.dataIndex}
               className={classNames(['taro-table-col'], {
-                'taro-table-col-fixed': columnItem.fixed
+                'taro-table-col-fixed': columnItem.fixed,
+                [colClassName]: true
               })}
               style={{
                 textAlign: columnItem.align || 'center',
@@ -54,7 +70,8 @@ function Row(props: RowProps) {
                     fixedType: columnItem.fixed,
                     index: colIndex,
                     columns
-                  })
+                  }),
+                ...colStyle
               }}
             >
               {result}

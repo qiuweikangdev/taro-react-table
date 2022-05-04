@@ -45,19 +45,19 @@ export default function Demo() {
 
   const columns = [
     {
-      title: '陈奕迅',
+      title: '陈奕迅1',
       dataIndex: 'name1'
     },
     {
-      title: '周柏豪',
+      title: '陈奕迅2',
       dataIndex: 'name2'
     },
     {
-      title: '张国荣',
+      title: '陈奕迅3',
       dataIndex: 'name3'
     },
     {
-      title: '林峯',
+      title: '陈奕迅4',
       dataIndex: 'name4'
     }
   ];
@@ -95,6 +95,7 @@ export default function Demo() {
         style={{ height: '250px' }}
         onLoad={onLoad}
         loadStatus={loadStatus}
+        loading
       ></Table>
     </View>
   );

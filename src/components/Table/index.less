@@ -1,5 +1,6 @@
 .taro-table-wrapper {
   padding: 10px;
+  position: relative;
 
   .taro-table-scroll {
     min-height: 100%;
@@ -65,5 +66,21 @@
       align-items: center;
       height: 65px;
     }
+
+
+  }
+
+  .taro-table-loading {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    opacity: 0.8;
+    z-index: 94;
   }
 }
