@@ -121,8 +121,9 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     const { scrollHeight = 0, scrollTop = 0 } = scrollDetail;
     const tableHeight = Number(height.replace('px', ''));
     props?.onScrollToLower?.(e);
-    if (loadStatus == 'noMore') return; // 无更多数据
-    if (Math.round(scrollHeight) == Math.round(tableHeight)) return; // 无数据
+    if (loadStatus === 'noMore') return; // 无更多数据
+    if (Math.round(scrollHeight) === Math.round(tableHeight)) return; // 无数据
+    if (scrollTop === 0) return;
     const diff = scrollHeight - (scrollTop + tableHeight);
     if (diff < 30 && loadStatus != 'loading') {
       setTimeout(() => {

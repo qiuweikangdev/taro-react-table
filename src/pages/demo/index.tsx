@@ -1,44 +1,44 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { View } from '@tarojs/components';
 import Table, { LoadStatus } from '../../components/Table';
 
 export default function Demo() {
   const [dataSource, setDataSource] = useState([
     {
-      name1: '单车1',
-      name2: '够钟1',
-      name3: '追1',
-      name4: '幼稚完1'
+      name1: '无人之境1',
+      name2: '打回原形1',
+      name3: '防不胜防1',
+      name4: '十面埋伏1'
     },
     {
-      name1: '单车2',
-      name2: '够钟2',
-      name3: '追2',
-      name4: '幼稚完2'
+      name1: '无人之境2',
+      name2: '打回原形2',
+      name3: '防不胜防2',
+      name4: '十面埋伏2'
     },
     {
-      name1: '单车3',
-      name2: '够钟3',
-      name3: '追3',
-      name4: '幼稚完3'
+      name1: '无人之境3',
+      name2: '打回原形3',
+      name3: '防不胜防3',
+      name4: '十面埋伏3'
     },
     {
-      name1: '单车4',
-      name2: '够钟4',
-      name3: '追4',
-      name4: '幼稚完4'
+      name1: '无人之境4',
+      name2: '打回原形4',
+      name3: '防不胜防4',
+      name4: '十面埋伏4'
     },
     {
-      name1: '单车5',
-      name2: '够钟5',
-      name3: '追5',
-      name4: '幼稚完5'
+      name1: '无人之境5',
+      name2: '打回原形5',
+      name3: '防不胜防5',
+      name4: '十面埋伏5'
     },
     {
-      name1: '单车6',
-      name2: '够钟6',
-      name3: '追6',
-      name4: '幼稚完6'
+      name1: '无人之境6',
+      name2: '打回原形6',
+      name3: '防不胜防6',
+      name4: '十面埋伏6'
     }
   ]);
   const [loadStatus, setLoadStatus] = useState<LoadStatus>(null);
@@ -69,10 +69,10 @@ export default function Demo() {
         for (let i = 1; i < 10; i++) {
           const size = list.length + 1;
           list.push({
-            name1: `单车${size}`,
-            name2: `够钟${size}`,
-            name3: `追${size}`,
-            name4: `幼稚完${size}`
+            name1: `无人之境${size}`,
+            name2: `打回原形${size}`,
+            name3: `防不胜防${size}`,
+            name4: `十面埋伏${size}`
           });
         }
         resolve(list);
@@ -95,7 +95,6 @@ export default function Demo() {
         style={{ height: '250px' }}
         onLoad={onLoad}
         loadStatus={loadStatus}
-        loading
       ></Table>
     </View>
   );

@@ -1,3 +1,3 @@
 export enum DefaultData {
-  ColWidth = 100
+  ColWidth = 110
 }
