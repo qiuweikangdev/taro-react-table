@@ -21,9 +21,10 @@ import Row from './Row';
 import Title from './Title';
 import Empty from './Empty';
 
-import './index.less';
 import Loading from '../Loading';
 import LoadMore from '../LoadMore';
+import { SorterEvent } from './types';
+import './index.less';
 
 export type ScrollDetail = {
   scrollLeft: number;
@@ -71,6 +72,8 @@ export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
   loadStatus: LoadStatus;
   LoadMore?: React.ReactNode;
   onLoad?: CommonEventFunction;
+  onSorter?: ({ column, field, order }: SorterEvent) => void;
+  unsort?: boolean;
 };
 
 const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
@@ -93,6 +96,8 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     loadStatus: pLoadStatus = null,
     loading = false,
     onLoad,
+    onSorter,
+    unsort = false, // 设置取消排序 【一般需求不需要取消排序，设置true可开启取消排序】
     ...props
   },
   ref
@@ -153,7 +158,11 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
               return (
                 <Title
                   key={item.key || item.dataIndex}
+                  columns={columns}
                   column={item}
+                  setColumns={setColumns}
+                  onSorter={onSorter}
+                  unsort={unsort}
                   index={index}
                 />
               );

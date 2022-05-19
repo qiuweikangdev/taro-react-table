@@ -1,3 +1,5 @@
+import { resolve } from 'path';
+
 const config = {
   projectName: 'taro-react-table',
   date: '2022-4-13',
@@ -14,6 +16,9 @@ const config = {
   copy: {
     patterns: [],
     options: {}
+  },
+  alias: {
+    '@': resolve(__dirname, '..', 'src')
   },
   framework: 'react',
   mini: {
@@ -56,9 +61,9 @@ const config = {
   }
 };
 
-module.exports = function(merge) {
+export default function(merge) {
   if (process.env.NODE_ENV === 'development') {
     return merge({}, config, require('./dev'));
   }
   return merge({}, config, require('./prod'));
-};
+}

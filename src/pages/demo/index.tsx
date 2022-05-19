@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { View } from '@tarojs/components';
+import { Columns, SorterEvent } from '../../components/Table/types';
 import Table, { LoadStatus } from '../../components/Table';
 
 export default function Demo() {
+  const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState([
     {
       name1: '无人之境1',
@@ -42,11 +44,17 @@ export default function Demo() {
     }
   ]);
   const [loadStatus, setLoadStatus] = useState<LoadStatus>(null);
+  const [sortInfo, setSortInfo] = useState<Omit<SorterEvent, 'column'>>({
+    field: 'name1',
+    order: 'ascend'
+  });
 
-  const columns = [
+  const columns: Columns[] = [
     {
       title: '陈奕迅1',
-      dataIndex: 'name1'
+      dataIndex: 'name1',
+      sorter: true,
+      sortOrder: sortInfo.field == 'name1' && sortInfo.order
     },
     {
       title: '陈奕迅2',
@@ -87,14 +95,30 @@ export default function Demo() {
     setLoadStatus(list.length > 20 ? 'noMore' : null);
   };
 
+  // 排序回调
+  const onSorter = ({ column, field, order }: SorterEvent) => {
+    console.log(column, field, order);
+    // 模拟排序加载效果
+    setLoading(state => !state);
+    setSortInfo({ order, field });
+    const tempList = [...dataSource];
+    setTimeout(() => {
+      setLoading(false);
+      tempList.reverse();
+      setDataSource(tempList);
+    }, 1000);
+  };
+
   return (
     <View>
       <Table
+        loading={loading}
         dataSource={dataSource}
         columns={columns}
         style={{ height: '250px' }}
         onLoad={onLoad}
         loadStatus={loadStatus}
+        onSorter={onSorter}
       ></Table>
     </View>
   );
