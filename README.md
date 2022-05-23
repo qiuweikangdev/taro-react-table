@@ -16,12 +16,25 @@
 ```bash
 npm install taro-react-table
 ````
-# 引入组件
+# 配置
+
+- config/index.js配置
+- 让taro去通过postcss编译处理 `taro-react-table`模块, 需要对 `taro-react-table` 里的样式单位进行转换适配
+
 ```js
-import Table from 'taro-react-table'
-import 'taro-react-table/dist/index.css'
+// config/index.js
+const config = {
+	h5:{
+       esnextModules: ['taro-react-table']
+    }
+}
 ```
 
+# 导入组件
+
+```js
+import Table from 'taro-react-table'
+```
 
 # 参数说明
 
@@ -29,6 +42,7 @@ import 'taro-react-table/dist/index.css'
 
 | 参数             | 描述                                                         | 类型                               | 必传 | 默认值 |
 | ---------------- | ------------------------------------------------------------ | ---------------------------------- | ---- | ------ |
+| 本身参数         | 参考[ScrollView](https://taro-docs.jd.com/taro/docs/components/viewContainer/scroll-view) |                                    |      |        |
 | `dataSource`     | 数据源                                                       | object[]                           | 是   | `[]`   |
 | `columns`        | 表格列的配置描述，具体项见下表                               | Columns[]                          | 是   | `[]`   |
 | `rowKey`         | 表格行 key 的取值，可以是字符串或一个函数                    | string \| function(record): string | 是   | `key`  |

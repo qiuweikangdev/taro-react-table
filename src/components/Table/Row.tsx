@@ -1,20 +1,9 @@
-import { CSSProperties, memo } from 'react';
+import { memo } from 'react';
 import classNames from 'classnames';
 import { View, Text } from '@tarojs/components';
 import { calculateFixedDistance, getSize } from './utils';
-import { DefaultData } from './types';
-import { Columns, DataSource } from '.';
+import { DefaultData, Columns, RowProps } from './types';
 import './index.less';
-
-export type RowProps<T = unknown> = {
-  index: number;
-  dataSourceItem: DataSource<T>;
-  columns: Columns<T>[];
-  rowStyle?: CSSProperties;
-  rowClassName?: string;
-  colStyle?: CSSProperties;
-  colClassName?: string;
-};
 
 function Row(props: RowProps) {
   const {

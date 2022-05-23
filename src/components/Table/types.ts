@@ -65,6 +65,16 @@ export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
   unsort?: boolean;
 };
 
+export type RowProps<T = unknown> = {
+  index: number;
+  dataSourceItem: DataSource<T>;
+  columns: Columns<T>[];
+  rowStyle?: CSSProperties;
+  rowClassName?: string;
+  colStyle?: CSSProperties;
+  colClassName?: string;
+};
+
 export type TitleProps = {
   columns: Columns[];
   column: Columns;
