@@ -1,5 +1,4 @@
 import {
-  CSSProperties,
   memo,
   useEffect,
   useState,
@@ -12,7 +11,6 @@ import classNames from 'classnames';
 
 import {
   BaseEventOrig,
-  CommonEventFunction,
   ScrollView,
   ScrollViewProps,
   View
@@ -23,58 +21,14 @@ import Empty from './Empty';
 
 import Loading from '../Loading';
 import LoadMore from '../LoadMore';
-import { SorterEvent } from './types';
+import {
+  ScrollDetail,
+  LoadStatus,
+  DataSource,
+  TableProps,
+  Columns
+} from './types';
 import './index.less';
-
-export type ScrollDetail = {
-  scrollLeft: number;
-  scrollTop: number;
-  scrollHeight: number;
-};
-
-export type Fixed = 'left' | 'right';
-
-export type LoadStatus = 'loading' | 'noMore' | null;
-
-export type DataSource<T = unknown> = {
-  [prop: string]: T;
-};
-
-export type Columns<T = unknown> = {
-  title: string | JSX.Element;
-  dataIndex: string;
-  key?: string;
-  align?: 'left' | 'right' | 'center';
-  style?: CSSProperties;
-  titleStyle?: CSSProperties;
-  className?: string;
-  titleClassName?: string;
-  render?: (text?: any, record?: T, index?: number) => JSX.Element | string;
-  width?: number;
-  fixed?: Fixed;
-};
-
-export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
-  dataSource: T[];
-  columns: Columns<T>[];
-  rowKey?: string | ((item: T) => React.Key);
-  wrapperClass?: string;
-  wrapperStyle?: CSSProperties;
-  className?: string;
-  colStyle?: CSSProperties;
-  colClassName?: string;
-  rowStyle?: CSSProperties;
-  rowClassName?: string;
-  titleStyle?: CSSProperties;
-  titleClassName?: string;
-  style?: CSSProperties;
-  loading?: boolean;
-  loadStatus: LoadStatus;
-  LoadMore?: React.ReactNode;
-  onLoad?: CommonEventFunction;
-  onSorter?: ({ column, field, order }: SorterEvent) => void;
-  unsort?: boolean;
-};
 
 const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   {
@@ -176,35 +130,41 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const renderTableBody = () => {
     return (
       <View className='taro-table-body'>
-        {dataSource.length > 0 ? (
-          dataSource.map(
-            (item: DataSource, index: number): JSX.Element => {
-              let key;
-              if (typeof rowKey === 'function') {
-                key = rowKey(item);
-              } else {
-                key = item[rowKey];
+        {dataSource.length > 0
+          ? dataSource.map(
+              (item: DataSource, index: number): JSX.Element => {
+                let key;
+                if (typeof rowKey === 'function') {
+                  key = rowKey(item);
+                } else {
+                  key = item[rowKey];
+                }
+                if (!key) {
+                  key = `row-item-${index}`;
+                }
+                return (
+                  <Row
+                    rowClassName={rowClassName}
+                    rowStyle={rowStyle}
+                    colClassName={colClassName}
+                    colStyle={colStyle}
+                    columns={columns}
+                    key={key}
+                    dataSourceItem={item}
+                    index={index}
+                  />
+                );
               }
-              if (!key) {
-                key = `row-item-${index}`;
-              }
-              return (
-                <Row
-                  rowClassName={rowClassName}
-                  rowStyle={rowStyle}
-                  colClassName={colClassName}
-                  colStyle={colStyle}
-                  columns={columns}
-                  key={key}
-                  dataSourceItem={item}
-                  index={index}
-                />
-              );
-            }
-          )
-        ) : (
-          <Empty />
-        )}
+            )
+          : loadStatus != 'loading' && <Empty />}
+      </View>
+    );
+  };
+
+  const renderTableLoad = () => {
+    return (
+      <View className='taro-table-load-wrapper'>
+        <LoadMore status={loadStatus} size={dataSource.length}></LoadMore>
       </View>
     );
   };
@@ -234,13 +194,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
         <View>
           {renderTableHead()}
           {renderTableBody()}
-          <View className='taro-table-load-wrapper'>
-            {props?.LoadMore ? (
-              props.LoadMore
-            ) : (
-              <LoadMore status={loadStatus}></LoadMore>
-            )}
-          </View>
+          {renderTableLoad()}
         </View>
       </ScrollView>
     </View>

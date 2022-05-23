@@ -1,20 +1,8 @@
-import { CSSProperties, memo } from 'react';
+import { memo } from 'react';
 import classNames from 'classnames';
 import { View, Text } from '@tarojs/components';
 import { getSize } from './utils';
-import { DefaultData, Columns, SortOrder, SorterEvent } from './types';
-
-export type TitleProps = {
-  columns: Columns[];
-  column: Columns;
-  setColumns?: any;
-  index: number;
-  fixed?: boolean;
-  titleStyle?: CSSProperties;
-  titleClassName?: string;
-  onSorter?: ({ column, field, order }: SorterEvent) => void;
-  unsort?: boolean;
-};
+import { DefaultData, Columns, SortOrder, TitleProps } from './types';
 
 function Title(props: TitleProps) {
   const {

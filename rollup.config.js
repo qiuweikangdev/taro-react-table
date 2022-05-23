@@ -35,8 +35,6 @@ export default {
       entries: [{ find: '@', replacement: resolveFile('src') }]
     }),
     postcss({
-      extract: true,
-      // namedExports:true,
       minimize: true
     }),
     RollupTypescript({

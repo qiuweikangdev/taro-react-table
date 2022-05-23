@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View } from '@tarojs/components';
-import { Columns, SorterEvent } from '../../components/Table/types';
-import Table, { LoadStatus } from '../../components/Table';
+import { Columns, LoadStatus, SorterEvent } from '../../components/Table/types';
+import Table from '../../components/Table';
 
 export default function Demo() {
   const [loading, setLoading] = useState(false);

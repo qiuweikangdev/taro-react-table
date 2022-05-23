@@ -1,3 +1,4 @@
+import { CommonEventFunction, ScrollViewProps } from '@tarojs/components';
 import { CSSProperties } from 'react';
 
 export enum DefaultData {
@@ -21,6 +22,12 @@ export type SortOrder = 'descend' | 'ascend' | undefined | false;
 
 export type CompareFn<T> = (a: T, b: T, sortOrder?: SortOrder) => number;
 
+export type SorterEvent = {
+  column: Columns;
+  order: SortOrder;
+  field: string;
+};
+
 export type Columns<T = unknown> = {
   title: string | JSX.Element;
   dataIndex: string;
@@ -37,8 +44,35 @@ export type Columns<T = unknown> = {
   sortOrder?: SortOrder;
 };
 
-export type SorterEvent = {
+export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
+  dataSource: T[];
+  columns: Columns<T>[];
+  rowKey?: string | ((item: T) => React.Key);
+  wrapperClass?: string;
+  wrapperStyle?: CSSProperties;
+  className?: string;
+  colStyle?: CSSProperties;
+  colClassName?: string;
+  rowStyle?: CSSProperties;
+  rowClassName?: string;
+  titleStyle?: CSSProperties;
+  titleClassName?: string;
+  style?: CSSProperties;
+  loading?: boolean;
+  loadStatus: LoadStatus;
+  onLoad?: CommonEventFunction;
+  onSorter?: ({ column, field, order }: SorterEvent) => void;
+  unsort?: boolean;
+};
+
+export type TitleProps = {
+  columns: Columns[];
   column: Columns;
-  order: SortOrder;
-  field: string;
+  setColumns?: any;
+  index: number;
+  fixed?: boolean;
+  titleStyle?: CSSProperties;
+  titleClassName?: string;
+  onSorter?: ({ column, field, order }: SorterEvent) => void;
+  unsort?: boolean;
 };
