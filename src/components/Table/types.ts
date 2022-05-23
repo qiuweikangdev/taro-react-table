@@ -59,7 +59,7 @@ export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
   titleClassName?: string;
   style?: CSSProperties;
   loading?: boolean;
-  loadStatus: LoadStatus;
+  loadStatus?: LoadStatus;
   onLoad?: CommonEventFunction;
   onSorter?: ({ column, field, order }: SorterEvent) => void;
   unsort?: boolean;

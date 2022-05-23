@@ -1,12 +1,7 @@
 
 import Table from './components/Table';
 
-export type { TableProps, DataSource, Columns, Fixed } from './components/Table';
-
-export type { RowProps } from './components/Table/Row';
-
-export type { TitleProps } from './components/Table/Title';
-
+export type { TableProps, DataSource, Columns, RowProps, TitleProps, Fixed } from './components/Table/types';
 
 export type { LoadMoreProps } from './components/LoadMore'
 
