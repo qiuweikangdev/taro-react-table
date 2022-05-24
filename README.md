@@ -34,6 +34,7 @@ const config = {
 
 ```js
 import Table from 'taro-react-table'
+import 'taro-react-table/dist/index.css'
 ```
 
 # 参数说明
