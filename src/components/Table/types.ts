@@ -2,7 +2,7 @@ import { CommonEventFunction, ScrollViewProps } from '@tarojs/components';
 import { CSSProperties } from 'react';
 
 export enum DefaultData {
-  ColWidth = 110
+  ColWidth = 125
 }
 export type ScrollDetail = {
   scrollLeft: number;
@@ -73,6 +73,8 @@ export type RowProps<T = unknown> = {
   rowClassName?: string;
   colStyle?: CSSProperties;
   colClassName?: string;
+  bordered?:boolean;
+  borderBottom?:boolean
 };
 
 export type TitleProps = {

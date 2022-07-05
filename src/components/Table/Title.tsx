@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import classNames from 'classnames';
 import { View, Text } from '@tarojs/components';
-import { getSize } from './utils';
+import { calculateFixedDistance, getSize } from './utils';
 import { DefaultData, Columns, SortOrder, TitleProps } from './types';
 
 function Title(props: TitleProps) {
@@ -49,9 +49,9 @@ function Title(props: TitleProps) {
         [titleClassName]: true
       })}
       style={{
-        // [column.fixed as string]:
-        // column.fixed &&
-        // calculateFixedDistance({ fixedType: column.fixed, index, columns }),
+        [column.fixed as string]:
+          column.fixed &&
+          calculateFixedDistance({ fixedType: column.fixed, index, columns }),
         width: getSize(column.width || DefaultData.ColWidth),
         ...column.titleStyle,
         ...titleStyle

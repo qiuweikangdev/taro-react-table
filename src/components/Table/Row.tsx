@@ -13,11 +13,14 @@ function Row(props: RowProps) {
     colClassName = '',
     colStyle = {},
     columns,
-    index
+    index,
   } = props;
   return (
     <View
-      className={classNames(['taro-table-row', rowClassName])}
+      className={classNames([
+        'taro-table-row',
+        rowClassName,
+      ])}
       style={rowStyle}
     >
       {columns.map(

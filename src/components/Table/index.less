@@ -58,6 +58,12 @@
          }
        }
 
+       .taro-table-fixed {
+         position: sticky;
+         z-index: 92;
+         top: 0;
+       }
+
        &-scroll {
          position: sticky;
          top: -1px;
@@ -75,9 +81,7 @@
          height: max-content;
          width: max-content;
          min-width: 100%;
-         padding: 10px 0px;
-
-         .taro-table-col-text {}
+         position: relative;
 
          .taro-table-col {
            display: flex;
@@ -85,7 +89,15 @@
            box-sizing: border-box;
            justify-content: center;
            font-size: 36px;
+           background: #fff;
+           padding: 10px 0px;
+           background-color: #fff;
+         }
 
+         .taro-table-col-fixed {
+           position: sticky;
+           z-index: 92;
+           top: 0;
          }
        }
 
@@ -97,14 +109,14 @@
        }
      }
 
-     .taro-table-load-wrapper {
-       display: flex;
-       justify-content: center;
-       align-items: center;
-       height: 65px;
-     }
 
+   }
 
+   .taro-table-load-wrapper {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     height: 65px;
    }
 
    .taro-table-loading {

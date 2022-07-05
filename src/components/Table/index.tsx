@@ -194,9 +194,9 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
         <View>
           {renderTableHead()}
           {renderTableBody()}
-          {renderTableLoad()}
         </View>
       </ScrollView>
+          {renderTableLoad()}
     </View>
   );
 };
