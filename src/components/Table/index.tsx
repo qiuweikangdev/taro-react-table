@@ -162,8 +162,12 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   };
 
   const renderTableLoad = () => {
+    const scrollLeft = scrollDetail.scrollLeft || '0';
     return (
-      <View className='taro-table-load-wrapper'>
+      <View
+        className='taro-table-load-wrapper'
+        style={{ left: `${scrollLeft}px` }}
+      >
         <LoadMore status={loadStatus} size={dataSource.length}></LoadMore>
       </View>
     );
@@ -194,9 +198,9 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
         <View>
           {renderTableHead()}
           {renderTableBody()}
+          {renderTableLoad()}
         </View>
       </ScrollView>
-          {renderTableLoad()}
     </View>
   );
 };
