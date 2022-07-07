@@ -54,7 +54,7 @@ export default function Demo() {
       title: '陈奕迅1',
       dataIndex: 'name1',
       sorter: true,
-      // fixed: 'left',
+      fixed: 'left',
       sortOrder: sortInfo.field == 'name1' && sortInfo.order
     },
     {

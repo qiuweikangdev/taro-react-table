@@ -57,6 +57,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   ref
 ) => {
   const scrollRef = useRef<HTMLElement>(null);
+  const loadMoreRef = useRef<HTMLElement>(null);
   const [dataSource, setDataSource] = useState<unknown[]>(pDataSource);
   const [columns, setColumns] = useState<Columns[]>(pColumns);
   const [scrollDetail, setScrollDetail] = useState<Partial<ScrollDetail>>({});
@@ -93,8 +94,11 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
 
   const onScroll = (e: BaseEventOrig<ScrollViewProps.onScrollDetail>) => {
     const { scrollTop, scrollHeight, scrollLeft } = e.detail;
-    setScrollDetail({ scrollTop, scrollHeight, scrollLeft });
-    props?.onScroll?.(e);
+      setScrollDetail({ scrollTop, scrollHeight, scrollLeft });
+      if(loadMoreRef.current?.style){
+        loadMoreRef.current.style.left = `${scrollLeft}px`
+      }
+      props?.onScroll?.(e);
   };
 
   const renderTableHead = () => {
@@ -162,11 +166,10 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   };
 
   const renderTableLoad = () => {
-    const scrollLeft = scrollDetail.scrollLeft || '0';
     return (
       <View
         className='taro-table-load-wrapper'
-        style={{ left: `${scrollLeft}px` }}
+        ref={loadMoreRef}
       >
         <LoadMore status={loadStatus} size={dataSource.length}></LoadMore>
       </View>
