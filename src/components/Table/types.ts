@@ -88,3 +88,5 @@ export type TitleProps = {
   onSorter?: ({ column, field, order }: SorterEvent) => void;
   unsort?: boolean;
 };
+
+export type ScrollDirección  =  'x' | 'y' | null
