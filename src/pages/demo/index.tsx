@@ -117,7 +117,6 @@ export default function Demo() {
         loading={loading}
         dataSource={dataSource}
         columns={columns}
-        total={20} // 数据总数
         style={{ height: '250px' }}
         onLoad={onLoad}
         loadStatus={loadStatus}

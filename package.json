@@ -1,6 +1,6 @@
 {
   "name": "taro-react-table",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "taro表格",
   "templateInfo": {
     "name": "default",
@@ -19,7 +19,7 @@
   ],
   "source": "src/index.ts",
   "main": "dist/index.js",
-  "umd": "dist/index.umd.js",
+  "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"

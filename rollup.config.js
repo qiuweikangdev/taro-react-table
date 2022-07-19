@@ -21,13 +21,16 @@ export default {
   output: [
     {
       file: resolveFile(pkg.main),
-      format: 'es'
-    }
-    // {
-    //   file: resolveFile(pkg.umd),
-    //   format: 'umd',
-    //   name: 'taro-react-table'
-    // }
+      format: 'cjs',
+      sourcemap: true,
+      exports: 'auto',
+    },
+    {
+      file: resolveFile(pkg.module),
+      format: 'es',
+      sourcemap: true,
+      exports: 'auto',
+    },
   ],
   external: externalPackages,
   plugins: [
@@ -41,6 +44,5 @@ export default {
     RollupTypescript({
       tsconfig: resolveFile('tsconfig.rollup.json')
     }),
-    terser()
   ]
 };

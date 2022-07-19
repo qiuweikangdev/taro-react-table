@@ -6,8 +6,6 @@ import {
   forwardRef,
   useImperativeHandle,
   ForwardRefRenderFunction,
-  useCallback,
-  useMemo
 } from 'react';
 import classNames from 'classnames';
 
