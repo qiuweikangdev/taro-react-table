@@ -2,7 +2,7 @@ import { memo } from 'react';
 import classNames from 'classnames';
 import { View, Text } from '@tarojs/components';
 import { calculateFixedDistance, getSize } from './utils';
-import { DefaultData, Columns, RowProps } from './types';
+import {  Columns, RowProps } from './types';
 import './index.less';
 
 function Row(props: RowProps) {
@@ -14,6 +14,7 @@ function Row(props: RowProps) {
     colStyle = {},
     columns,
     index,
+    colWidth = 0,
   } = props;
   return (
     <View
@@ -55,13 +56,14 @@ function Row(props: RowProps) {
               })}
               style={{
                 textAlign: columnItem.align || 'center',
-                width: getSize(columnItem.width || DefaultData.ColWidth),
+                width: getSize(columnItem.width || colWidth),
                 [columnItem.fixed as string]:
                   columnItem.fixed &&
                   calculateFixedDistance({
                     fixedType: columnItem.fixed,
                     index: colIndex,
-                    columns
+                    columns,
+                    colWidth
                   }),
                 ...colStyle
               }}

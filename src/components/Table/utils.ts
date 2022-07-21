@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro';
-import { DefaultData, Columns, Fixed } from './types';
+import { Columns, Fixed } from './types';
 
 export const getSize = (size: string | number): string => {
   if (typeof size === 'number') {
@@ -17,13 +17,14 @@ export function calculateFixedDistance(options: {
   fixedType: Fixed;
   index: number;
   columns: Columns[];
+  colWidth: number;
 }) {
-  const { fixedType, index, columns } = options;
+  const { fixedType, index, columns, colWidth = 0 } = options;
   let result: number = 0;
   if (fixedType === 'left') {
     result = columns.reduce(function(prev, cur, i) {
       if (i + 1 <= index) {
-        return prev + (cur.width || DefaultData.ColWidth);
+        return prev + (cur.width || colWidth);
       } else {
         return prev;
       }
@@ -31,7 +32,7 @@ export function calculateFixedDistance(options: {
   } else {
     result = columns.reduceRight(function(prev, cur, i) {
       if (i - 1 >= index) {
-        return prev + (cur.width || DefaultData.ColWidth);
+        return prev + (cur.width || colWidth);
       } else {
         return prev;
       }

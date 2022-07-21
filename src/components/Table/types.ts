@@ -1,9 +1,6 @@
 import { CommonEventFunction, ScrollViewProps } from '@tarojs/components';
 import { CSSProperties } from 'react';
 
-export enum DefaultData {
-  ColWidth = 125
-}
 export type ScrollDetail = {
   scrollLeft: number;
   scrollTop: number;
@@ -60,6 +57,7 @@ export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
   style?: CSSProperties;
   loading?: boolean;
   loadStatus?: LoadStatus;
+  colWidth?:number;
   onLoad?: CommonEventFunction;
   onSorter?: ({ column, field, order }: SorterEvent) => void;
   unsort?: boolean;
@@ -74,7 +72,8 @@ export type RowProps<T = unknown> = {
   colStyle?: CSSProperties;
   colClassName?: string;
   bordered?:boolean;
-  borderBottom?:boolean
+  borderBottom?:boolean;
+  colWidth?:number
 };
 
 export type TitleProps = {
@@ -87,6 +86,7 @@ export type TitleProps = {
   titleClassName?: string;
   onSorter?: ({ column, field, order }: SorterEvent) => void;
   unsort?: boolean;
+  colWidth?: number;
 };
 
 export type ScrollDirección  =  'x' | 'y' | null

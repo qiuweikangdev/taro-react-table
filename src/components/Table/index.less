@@ -1,144 +1,144 @@
- @import '../../styles/index.less';
+@import '../../styles/index.less';
 
- .taro-table-wrapper {
-   padding: 10px;
-   position: relative;
+.taro-table-wrapper {
+  padding: 10px;
+  position: relative;
 
-   .taro-table-scroll {
-     min-height: 100%;
-     min-width: 100%;
+  .taro-table-scroll {
+    min-height: 100%;
+    min-width: 100%;
 
-     .taro-table-head {
-       display: flex;
-       align-items: center;
-       justify-content: flex-start;
-       width: max-content;
-       min-width: 100%;
-       height: 100px;
-       background-color: #fafafa;
+    .taro-table-head {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: max-content;
+      min-width: 100%;
+      height: 100px;
+      background-color: #fafafa;
 
-       .taro-table-title {
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         height: 100px;
-         font-weight: 600;
-         color: rgba(0, 0, 0, 0.75);
-         background: #fafafa;
-         font-size: 36px;
+      .taro-table-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100px;
+        font-weight: 600;
+        color: rgba(0, 0, 0, 0.75);
+        background: #fafafa;
+        &-text {
+          font-size: 34px;
+        }
+        &-sort-wrwapper {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 0px 10px;
 
-         &-sort-wrwapper {
-           display: flex;
-           flex-direction: column;
-           align-items: center;
-           justify-content: center;
+          .title-ascend {
+            border-top: 10px solid transparent;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid @sorter-color;
+            margin-bottom: 10px;
 
-           .title-ascend {
-             border-top: 10px solid transparent;
-             border-left: 10px solid transparent;
-             border-right: 10px solid transparent;
-             border-bottom: 10px solid @sorter-color;
-             margin-bottom: 10px;
+            &-active {
+              border-bottom-color: @theme-color;
+            }
+          }
 
-             &-active {
-               border-bottom-color: @theme-color;
-             }
-           }
+          .title-descend {
+            border-top: 10px solid @sorter-color;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid transparent;
 
-           .title-descend {
-             border-top: 10px solid @sorter-color;
-             border-left: 10px solid transparent;
-             border-right: 10px solid transparent;
-             border-bottom: 10px solid transparent;
+            &-active {
+              border-top-color: @theme-color;
+            }
+          }
+        }
+      }
 
-             &-active {
-               border-top-color: @theme-color;
-             }
-           }
-         }
-       }
+      .taro-table-fixed {
+        position: sticky;
+        z-index: 92;
+        top: 0;
+      }
 
-       .taro-table-fixed {
-         position: sticky;
-         z-index: 92;
-         top: 0;
-       }
+      &-scroll {
+        position: sticky;
+        top: -1px;
+        z-index: 93;
+      }
+    }
 
-       &-scroll {
-         position: sticky;
-         top: -1px;
-         z-index: 93;
-       }
-     }
+    .taro-table-body {
+      min-height: 100%;
 
-     .taro-table-body {
-       min-height: 100%;
+      .taro-table-row {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        height: max-content;
+        width: max-content;
+        min-width: 100%;
+        position: relative;
 
-       .taro-table-row {
-         display: flex;
-         align-items: center;
-         justify-content: flex-start;
-         height: max-content;
-         width: max-content;
-         min-width: 100%;
-         position: relative;
+        .taro-table-col {
+          display: flex;
+          align-items: center;
+          box-sizing: border-box;
+          justify-content: center;
+          font-size: 34px;
+          background: #fff;
+          padding: 10px 0px;
+          background-color: #fff;
+        }
 
-         .taro-table-col {
-           display: flex;
-           align-items: center;
-           box-sizing: border-box;
-           justify-content: center;
-           font-size: 36px;
-           background: #fff;
-           padding: 10px 0px;
-           background-color: #fff;
-         }
+        .taro-table-col-fixed {
+          position: sticky;
+          z-index: 92;
+          top: 0;
+        }
+      }
 
-         .taro-table-col-fixed {
-           position: sticky;
-           z-index: 92;
-           top: 0;
-         }
-       }
+      .taro-table-empty {
+        text-align: center;
+        margin: 20px 0px;
+        font-size: 32px;
+        color: #969799;
+      }
+    }
+  }
 
-       .taro-table-empty {
-         text-align: center;
-         margin: 20px 0px;
-         font-size: 32px;
-         color: #969799;
-       }
-     }
+  .taro-table-content-wrapper {
+    .taro-table-content {
+      &.taro-table-content-scroll-x {
+        overflow-x: auto;
+      }
+    }
+  }
 
+  .taro-table-load-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 65px;
+    position: relative;
+  }
 
-   }
-
-   .taro-table-content-wrapper {
-     .taro-table-content {
-       &.taro-table-content-scroll-x {
-         overflow-x: auto;
-       }
-     }
-   }
-
-   .taro-table-load-wrapper {
-     display: flex;
-     justify-content: center;
-     align-items: center;
-     height: 65px;
-     position: relative;
-   }
-
-   .taro-table-loading {
-     position: absolute;
-     top: 0px;
-     bottom: 0px;
-     text-align: center;
-     width: 100%;
-     display: flex;
-     justify-content: center;
-     align-items: center;
-     background-color: #fff;
-     opacity: 0.8;
-     z-index: 94;
-   }
- }
+  .taro-table-loading {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    opacity: 0.8;
+    z-index: 94;
+  }
+}
