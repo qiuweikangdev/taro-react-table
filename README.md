@@ -60,7 +60,10 @@ import 'taro-react-table/dist/index.css'
 | `titleClassName` | 标题类名                                                     | string                             | 否   |        |
 | `loading`        | 是否显示加载                                                 | boolean                            | 否   |        |
 | `loadStatus`     | 加载状态                                                     | loading \| noMore \| null          | 否   | null   |
+| `colWidth`       | 列宽度                                                       | *number*                           | 否   | 120    |
 | `unsort`         | 设置是否取消排序 (一般需求不需要取消排序，设置true可开启取消排序) | boolean                            | 否   | false  |
+
+
 
 ## Events
 
@@ -85,134 +88,133 @@ import 'taro-react-table/dist/index.css'
 | `render`    | 生成复杂数据的渲染函数，参数分别为当前行的值，当前行数据，行索引 | function(text, record, index) {}   | 否          |        |
 | `width`     | ScrollView容器类名                                           | string                             | 否          |        |
 | `fixed`     | 固定列                                                       | left \| right                      | 否          |        |
+| `sorter`    | 排序函数，本地排序使用一个函数(参考 [Array.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) 的 compareFunction)，需要服务端排序可设为 true | CompareFn                          | 否          |        |
+| `sortOrder` | 排序的受控属性，外界可用此控制列的排序，可设置为 `ascend` `descend` false | boolean \| string                  |             |        |
 
 # 使用
 
 ```jsx
-import { useState } from 'react';
-import { View } from '@tarojs/components';
-import { Columns, SorterEvent } from '../../components/Table/types';
-import Table, { LoadStatus } from '../../components/Table';
+import { useState } from 'react'
+import Table,{ Columns, LoadStatus, SorterEvent } from 'taro-react-table'
 
 export default function Demo() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
   const [dataSource, setDataSource] = useState([
     {
       name1: '无人之境1',
       name2: '打回原形1',
       name3: '防不胜防1',
-      name4: '十面埋伏1'
+      name4: '十面埋伏1',
     },
     {
       name1: '无人之境2',
       name2: '打回原形2',
       name3: '防不胜防2',
-      name4: '十面埋伏2'
+      name4: '十面埋伏2',
     },
     {
       name1: '无人之境3',
       name2: '打回原形3',
       name3: '防不胜防3',
-      name4: '十面埋伏3'
+      name4: '十面埋伏3',
     },
     {
       name1: '无人之境4',
       name2: '打回原形4',
       name3: '防不胜防4',
-      name4: '十面埋伏4'
+      name4: '十面埋伏4',
     },
     {
       name1: '无人之境5',
       name2: '打回原形5',
       name3: '防不胜防5',
-      name4: '十面埋伏5'
+      name4: '十面埋伏5',
     },
     {
       name1: '无人之境6',
       name2: '打回原形6',
       name3: '防不胜防6',
-      name4: '十面埋伏6'
-    }
-  ]);
-  const [loadStatus, setLoadStatus] = useState<LoadStatus>(null);
+      name4: '十面埋伏6',
+    },
+  ])
+  const [loadStatus, setLoadStatus] = useState<LoadStatus>(null)
   const [sortInfo, setSortInfo] = useState<Omit<SorterEvent, 'column'>>({
     field: 'name1',
-    order: 'ascend'
-  });
+    order: 'ascend',
+  })
 
   const columns: Columns[] = [
     {
       title: '陈奕迅1',
       dataIndex: 'name1',
       sorter: true,
-      sortOrder: sortInfo.field == 'name1' && sortInfo.order
+      fixed: 'left',
+      sortOrder: sortInfo.field == 'name1' && sortInfo.order,
     },
     {
       title: '陈奕迅2',
-      dataIndex: 'name2'
+      dataIndex: 'name2',
     },
     {
       title: '陈奕迅3',
-      dataIndex: 'name3'
+      dataIndex: 'name3',
     },
     {
       title: '陈奕迅4',
-      dataIndex: 'name4'
-    }
-  ];
+      dataIndex: 'name4',
+    },
+  ]
 
   const getList = async (): Promise<any[]> => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        const list = [...dataSource];
+        const list = [...dataSource]
         for (let i = 1; i < 10; i++) {
-          const size = list.length + 1;
+          const size = list.length + 1
           list.push({
             name1: `无人之境${size}`,
             name2: `打回原形${size}`,
             name3: `防不胜防${size}`,
-            name4: `十面埋伏${size}`
-          });
+            name4: `十面埋伏${size}`,
+          })
         }
-        resolve(list);
-      }, 1000);
-    });
-  };
+        resolve(list)
+      }, 1000)
+    })
+  }
 
   const onLoad = async e => {
-    setLoadStatus('loading');
-    const list = await getList();
-    setDataSource(list);
-    setLoadStatus(list.length > 20 ? 'noMore' : null);
-  };
+    setLoadStatus('loading')
+    const list = await getList()
+    setDataSource(list)
+    setLoadStatus(list.length > 20 ? 'noMore' : null)
+  }
 
   // 排序回调
   const onSorter = ({ column, field, order }: SorterEvent) => {
-    console.log(column, field, order);
+    console.log(column, field, order)
     // 模拟排序加载效果
-    setLoading(state => !state);
-    setSortInfo({ order, field });
-    const tempList = [...dataSource];
+    setLoading(state => !state)
+    setSortInfo({ order, field })
+    const tempList = [...dataSource]
     setTimeout(() => {
-      setLoading(false);
-      tempList.reverse();
-      setDataSource(tempList);
-    }, 1000);
-  };
+      setLoading(false)
+      tempList.reverse()
+      setDataSource(tempList)
+    }, 1000)
+  }
 
   return (
-    <View>
-      <Table
-        loading={loading}
-        dataSource={dataSource}
-        columns={columns}
-        style={{ height: '250px' }}
-        onLoad={onLoad}
-        loadStatus={loadStatus}
-        onSorter={onSorter}
-      ></Table>
-    </View>
-  );
+    <Table
+      loading={loading}
+      dataSource={dataSource}
+      columns={columns}
+      style={{ height: '250px' }}
+      onLoad={onLoad}
+      loadStatus={loadStatus}
+      onSorter={onSorter}
+    ></Table>
+  )
 }
 
 ```

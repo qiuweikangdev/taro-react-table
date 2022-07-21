@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { View } from '@tarojs/components'
 import { Columns, LoadStatus, SorterEvent } from '../../components/Table/types'
 import Table from '../../components/Table'
 
@@ -111,16 +110,14 @@ export default function Demo() {
   }
 
   return (
-    <View>
-      <Table
-        loading={loading}
-        dataSource={dataSource}
-        columns={columns}
-        style={{ height: '250px' }}
-        onLoad={onLoad}
-        loadStatus={loadStatus}
-        onSorter={onSorter}
-      ></Table>
-    </View>
+    <Table
+      loading={loading}
+      dataSource={dataSource}
+      columns={columns}
+      style={{ height: '250px' }}
+      onLoad={onLoad}
+      loadStatus={loadStatus}
+      onSorter={onSorter}
+    ></Table>
   )
 }
