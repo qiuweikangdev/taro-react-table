@@ -14,11 +14,14 @@ function Title(props: TitleProps) {
     titleClassName = '',
     colWidth = 0,
     unsort,
+    setDataSource,
+    dataSource = [],
     onSorter,
   } = props
 
   const handleClickTitle = (col: Columns, colIndex: number) => {
-    if (col.sorter) {
+    const sorter = col.sorter
+    if (sorter) {
       const tempColumns = [...columns]
       tempColumns.forEach((j: Columns, i: number): void => {
         if (i !== colIndex) {
@@ -37,6 +40,12 @@ function Title(props: TitleProps) {
       const curIndex: number = curCol.indexOf(tempColumns[colIndex].sortOrder)
       const next: SortOrder = (tempColumns[colIndex].sortOrder =
         curCol[(curIndex + 1) % curCol.length])
+
+      if (typeof sorter === 'function') {
+        const tempDataSource = [...dataSource]
+        const sortDataSource = tempDataSource.sort((a, b) => sorter(a, b))
+        setDataSource(sortDataSource)
+      }
       setColumns(tempColumns)
       onSorter?.({ column, field: col.dataIndex, order: next })
     }
