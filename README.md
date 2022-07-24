@@ -62,6 +62,7 @@ import 'taro-react-table/dist/index.css'
 | `loadStatus`     | 加载状态                                                     | loading \| noMore \| null          | 否   | null   |
 | `colWidth`       | 列宽度                                                       | *number*                           | 否   | 120    |
 | `unsort`         | 设置是否取消排序 (一般需求不需要取消排序，设置true可开启取消排序) | boolean                            | 否   | false  |
+| `showHeader`     | 是否显示表头                                                 | boolean                            | 否   | true   |
 
 
 
@@ -95,6 +96,7 @@ import 'taro-react-table/dist/index.css'
 
 ```jsx
 import { useState } from 'react'
+import 'taro-react-table/dist/index.css'
 import Table,{ Columns, LoadStatus, SorterEvent } from 'taro-react-table'
 
 export default function Demo() {

@@ -1,11 +1,11 @@
 import {
   memo,
-  useEffect,
   useState,
   useRef,
   forwardRef,
   useImperativeHandle,
   ForwardRefRenderFunction,
+  useCallback,
 } from 'react'
 import classNames from 'classnames'
 
@@ -16,6 +16,7 @@ import Empty from './Empty'
 
 import Loading from '../Loading'
 import LoadMore from '../LoadMore'
+import { useUpdateState } from '../../hooks'
 import { ScrollDetail, LoadStatus, DataSource, TableProps, Columns, ScrollDirección } from './types'
 import './index.less'
 
@@ -42,6 +43,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     onLoad,
     onSorter,
     unsort = false, // 设置取消排序 【一般需求不需要取消排序，设置true可开启取消排序】
+    showHeader = true,
     ...props
   },
   ref,
@@ -52,35 +54,27 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     scrollHeight: 0,
     scrollTop: 0,
   })
-  const [dataSource, setDataSource] = useState<unknown[]>(pDataSource)
-  const [columns, setColumns] = useState<Columns[]>(pColumns)
-  const [loadStatus, setLoadStatus] = useState<LoadStatus>(pLoadStatus)
+  const [dataSource, setDataSource] = useUpdateState<unknown[]>(pDataSource)
+  const [columns, setColumns] = useUpdateState<Columns[]>(pColumns)
+  const [loadStatus] = useUpdateState<LoadStatus>(pLoadStatus)
   const [scrollDiff, setScrollDiff] = useState<number>(0)
   const [scrollDirección, setScrollDirección] = useState<ScrollDirección>(null)
 
-  useEffect(() => {
-    setLoadStatus(pLoadStatus)
-  }, [pLoadStatus])
-
-  useEffect(() => {
-    setDataSource(pDataSource)
-  }, [pDataSource])
-
-  useEffect(() => {
-    setColumns(pColumns)
-  }, [pColumns])
-
-  // 上拉加载
-  const onScrollToLower = e => {
-    const { height = '' } = scrollRef?.current?.style || {}
-    const { scrollHeight = 0, scrollTop = 0 } = scrollDetailRef.current
-    const tableHeight = Number(
+  const getHeight = useCallback(height => {
+    return Number(
       height
         .replace('calc', '')
         .replace('(', '')
         .replace(')', '')
         .replace('px', ''),
     )
+  }, [])
+
+  // 上拉加载
+  const onScrollToLower = e => {
+    const { height = '' } = scrollRef?.current?.style || {}
+    const { scrollHeight = 0, scrollTop = 0 } = scrollDetailRef.current
+    const tableHeight = getHeight(height)
     props?.onScrollToLower?.(e)
     // 无更多数据
     if (loadStatus === 'noMore') return
@@ -97,13 +91,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const onScroll = (e: BaseEventOrig<ScrollViewProps.onScrollDetail>) => {
     const { scrollTop, scrollHeight, scrollLeft } = e.detail
     const { height = '' } = scrollRef?.current?.style || {}
-    const clientHeight = Number(
-      String(height)
-        .replace('calc', '')
-        .replace('(', '')
-        .replace(')', '')
-        .replace('px', ''),
-    )
+    const clientHeight = getHeight(height)
     const diff = scrollHeight - (Math.round(scrollTop) + clientHeight)
     const direction = scrollDetailRef.current.scrollLeft === scrollLeft ? 'x' : 'y'
     setScrollDirección(direction)
@@ -134,6 +122,8 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
                   unsort={unsort}
                   index={index}
                   colWidth={colWidth}
+                  setDataSource={setDataSource}
+                  dataSource={dataSource}
                 />
               )
             },
@@ -206,7 +196,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
         onScroll={onScroll}
       >
         <View className='taro-table-content-wrapper'>
-          {renderTableHead()}
+          {showHeader && renderTableHead()}
           {renderTableBody()}
           {renderTableLoad()}
         </View>
