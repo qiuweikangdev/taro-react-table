@@ -44,6 +44,9 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     onSorter,
     unsort = false, // 设置取消排序 【一般需求不需要取消排序，设置true可开启取消排序】
     showHeader = true,
+    loadingText = '',
+    noMoreText,
+    loadLoadingText,
     ...props
   },
   ref,
@@ -60,18 +63,12 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const [scrollDiff, setScrollDiff] = useState<number>(0)
   const [scrollDirección, setScrollDirección] = useState<ScrollDirección>(null)
 
-  const getHeight = useCallback(height => {
-    return Number(
-      height
-        .replace('calc', '')
-        .replace('(', '')
-        .replace(')', '')
-        .replace('px', ''),
-    )
+  const getHeight = useCallback((height) => {
+    return Number(height.replace('calc', '').replace('(', '').replace(')', '').replace('px', ''))
   }, [])
 
   // 上拉加载
-  const onScrollToLower = e => {
+  const onScrollToLower = (e) => {
     const { height = '' } = scrollRef?.current?.style || {}
     const { scrollHeight = 0, scrollTop = 0 } = scrollDetailRef.current
     const tableHeight = getHeight(height)
@@ -171,7 +168,12 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const renderTableLoad = () => {
     return (
       <View className='taro-table-load-wrapper'>
-        <LoadMore status={loadStatus} size={dataSource.length}></LoadMore>
+        <LoadMore
+          status={loadStatus}
+          size={dataSource.length}
+          noMoreText={noMoreText}
+          loadingText={loadLoadingText}
+        ></LoadMore>
       </View>
     )
   }
@@ -182,7 +184,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     <View className={classNames(['taro-table-wrapper', wrapperClass])} style={wrapperStyle}>
       {loading && (
         <View className='taro-table-loading'>
-          <Loading text={null}></Loading>
+          <Loading text={loadingText}></Loading>
         </View>
       )}
       <ScrollView

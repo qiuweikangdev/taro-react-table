@@ -56,12 +56,15 @@ export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
   titleClassName?: string
   style?: CSSProperties
   loading?: boolean
+  loadingText?: string
   loadStatus?: LoadStatus
   colWidth?: number
   onLoad?: CommonEventFunction
   onSorter?: ({ column, field, order }: SorterEvent) => void
   unsort?: boolean
   showHeader?: boolean
+  noMoreText?: string
+  loadLoadingText?: string
 }
 
 export type RowProps<T = unknown> = {
