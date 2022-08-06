@@ -133,7 +133,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const renderTableBody = () => {
     return (
       <View className='taro-table-body'>
-        {dataSource.length > 0
+        {dataSource.length > 0 && columns.length > 0
           ? dataSource.map(
               (item: DataSource, index: number): JSX.Element => {
                 let key
@@ -198,7 +198,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
         onScroll={onScroll}
       >
         <View className='taro-table-content-wrapper'>
-          {showHeader && renderTableHead()}
+          {showHeader && columns.length > 0 && renderTableHead()}
           {renderTableBody()}
           {renderTableLoad()}
         </View>
