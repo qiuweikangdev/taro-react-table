@@ -91,6 +91,12 @@
   "dependencies": {
     "classnames": "^2.3.1"
   },
+  "peerDependencies": {
+    "@tarojs/components": ">=3",
+    "@tarojs/taro": ">=3",
+    "react": ">=16.9",
+    "react-dom": ">=16.9"
+  },
   "bugs": {
     "url": "https://github.com/qiuweikangdev/taro-react-table/issues"
   },
