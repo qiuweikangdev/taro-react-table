@@ -75,6 +75,7 @@ import 'taro-react-table/dist/index.css'
 | ---------- | -------------------------- | --------------------------------------- | ---- | ------ |
 | `onLoad`   | 滚动底部触发，用于上拉加载 | Function                                | 否   |        |
 | `onSorter` | 点击表头按钮触发排序       | ({ column, field, order }: SorterEvent) | 否   |        |
+| `onRow`    | 行点击事件                 | Function                                | 否   |        |
 
 
 
@@ -94,6 +95,9 @@ import 'taro-react-table/dist/index.css'
 | `fixed`     | 固定列                                                       | left \| right                      | 否          |        |
 | `sorter`    | 排序函数，本地排序使用一个函数(参考 [Array.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) 的 compareFunction)，需要服务端排序可设为 true | CompareFn                          | 否          |        |
 | `sortOrder` | 排序的受控属性，外界可用此控制列的排序，可设置为 `ascend` `descend` false | boolean \| string                  |             |        |
+| `onCell`    | 单元格点击事件                                               | Function                           | 否          |        |
+
+
 
 # 使用
 
