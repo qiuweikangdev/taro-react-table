@@ -47,6 +47,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     loadingText = '',
     noMoreText,
     loadLoadingText,
+    onRow,
     ...props
   },
   ref,
@@ -156,6 +157,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
                     dataSourceItem={item}
                     index={index}
                     colWidth={colWidth}
+                    onRow={onRow}
                   />
                 )
               },

@@ -1,9 +1,9 @@
-import { memo } from 'react';
-import classNames from 'classnames';
-import { View, Text } from '@tarojs/components';
-import { calculateFixedDistance, getSize } from './utils';
-import {  Columns, RowProps } from './types';
-import './index.less';
+import { memo } from 'react'
+import classNames from 'classnames'
+import { View, Text } from '@tarojs/components'
+import { calculateFixedDistance, getSize } from './utils'
+import { Columns, RowProps } from './types'
+import './index.less'
 
 function Row(props: RowProps) {
   const {
@@ -15,36 +15,29 @@ function Row(props: RowProps) {
     columns,
     index,
     colWidth = 0,
-  } = props;
+    onRow,
+  } = props
   return (
-    <View
-      className={classNames([
-        'taro-table-row',
-        rowClassName,
-      ])}
-      style={rowStyle}
-    >
+    <View className={classNames(['taro-table-row', rowClassName])} style={rowStyle}>
       {columns.map(
         (columnItem: Columns, colIndex: number): JSX.Element => {
-          const text = dataSourceItem[columnItem.dataIndex];
-          let result;
+          const text = dataSourceItem[columnItem.dataIndex]
+          let result
 
           if (columnItem.render) {
             const render = (
               <Text className='taro-table-col-text'>
                 {columnItem.render(text, dataSourceItem, index)}
               </Text>
-            );
+            )
 
             if (typeof render !== 'object') {
-              result = <Text className='taro-table-col-text'>{render}</Text>;
+              result = <Text className='taro-table-col-text'>{render}</Text>
             } else {
-              result = render;
+              result = render
             }
           } else {
-            result = (
-              <Text className='taro-table-col-text'>{String(text)}</Text>
-            );
+            result = <Text className='taro-table-col-text'>{String(text)}</Text>
           }
 
           return (
@@ -52,7 +45,7 @@ function Row(props: RowProps) {
               key={columnItem.key || columnItem.dataIndex}
               className={classNames(['taro-table-col'], {
                 'taro-table-col-fixed': columnItem.fixed,
-                [colClassName]: true
+                [colClassName]: true,
               })}
               style={{
                 textAlign: columnItem.align || 'center',
@@ -63,18 +56,19 @@ function Row(props: RowProps) {
                     fixedType: columnItem.fixed,
                     index: colIndex,
                     columns,
-                    colWidth
+                    colWidth,
                   }),
-                ...colStyle
+                ...colStyle,
               }}
+              onClick={() => onRow?.(dataSourceItem, index)}
             >
               {result}
             </View>
-          );
-        }
+          )
+        },
       )}
     </View>
-  );
+  )
 }
 
-export default memo(Row);
+export default memo(Row)

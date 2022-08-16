@@ -88,7 +88,7 @@ export default function Demo() {
     })
   }
 
-  const onLoad = async e => {
+  const onLoad = async (e) => {
     setLoadStatus('loading')
     const list = await getList()
     setDataSource(list)
@@ -99,7 +99,7 @@ export default function Demo() {
   const onSorter = ({ column, field, order }: SorterEvent) => {
     console.log(column, field, order)
     // 模拟排序加载效果
-    setLoading(state => !state)
+    setLoading((state) => !state)
     setSortInfo({ order, field })
     const tempList = [...dataSource]
     setTimeout(() => {
