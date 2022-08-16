@@ -34,11 +34,12 @@ export type Columns<T = unknown> = {
   titleStyle?: CSSProperties
   className?: string
   titleClassName?: string
-  render?: (text?: any, record?: T, index?: number) => JSX.Element | string
+  render?: (text?: any, record?: T, index?: number) => any
   width?: number
   fixed?: Fixed
   sorter?: boolean | CompareFn<T>
   sortOrder?: SortOrder
+  onCell?: (record: T, rowIndex: number) => void
 }
 
 export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {

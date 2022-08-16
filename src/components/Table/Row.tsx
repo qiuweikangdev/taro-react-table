@@ -23,21 +23,11 @@ function Row(props: RowProps) {
         (columnItem: Columns, colIndex: number): JSX.Element => {
           const text = dataSourceItem[columnItem.dataIndex]
           let result
-
           if (columnItem.render) {
-            const render = (
-              <Text className='taro-table-col-text'>
-                {columnItem.render(text, dataSourceItem, index)}
-              </Text>
-            )
-
-            if (typeof render !== 'object') {
-              result = <Text className='taro-table-col-text'>{render}</Text>
-            } else {
-              result = render
-            }
+            const render = columnItem.render(text, dataSourceItem, index)
+            result = render
           } else {
-            result = <Text className='taro-table-col-text'>{String(text)}</Text>
+            result = String(text)
           }
 
           return (
@@ -62,7 +52,7 @@ function Row(props: RowProps) {
               }}
               onClick={() => onRow?.(dataSourceItem, index)}
             >
-              {result}
+              <Text className='taro-table-col-text' onClick={()=>columnItem?.onCell?.(dataSourceItem, index)}>{result}</Text>
             </View>
           )
         },
