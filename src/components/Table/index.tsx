@@ -49,6 +49,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     loadLoadingText,
     onRow,
     distance = 30,
+    showLoad = true,
     ...props
   },
   ref,
@@ -75,8 +76,8 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     const { scrollHeight = 0, scrollTop = 0 } = scrollDetailRef.current
     const tableHeight = getHeight(height)
     props?.onScrollToLower?.(e)
-    // 无更多数据
-    if (loadStatus === 'noMore') return
+    if (!showLoad) return
+    if (loadStatus === 'noMore') return // 无更多数据
     if (Math.round(scrollHeight) === Math.round(tableHeight)) return // 无数据
     if (scrollTop === 0) return
     const diff = scrollHeight - (scrollTop + tableHeight)
@@ -204,7 +205,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
         <View className='taro-table-content-wrapper'>
           {showHeader && columns.length > 0 && renderTableHead()}
           {renderTableBody()}
-          {renderTableLoad()}
+          {showLoad && renderTableLoad()}
         </View>
       </ScrollView>
     </View>
