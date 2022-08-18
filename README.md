@@ -66,6 +66,7 @@ import 'taro-react-table/dist/index.css'
 | `showHeader`      | 是否显示表头                                                 | boolean                            | 否   | true       |
 | `noMoreText`      | loadStatus为noMore 状态显示文案                              | string                             | 否   | 没有更多了 |
 | `loadLoadingText` | loadStatus为loading 状态显示文案                             | string                             | 否   | 加载中...  |
+| `distance`        | 小于视窗距离多少开始触发onLoad                               | number                             | 否   | 30         |
 
 
 

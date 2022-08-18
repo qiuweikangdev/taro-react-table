@@ -48,6 +48,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     noMoreText,
     loadLoadingText,
     onRow,
+    distance = 30,
     ...props
   },
   ref,
@@ -61,7 +62,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const [dataSource, setDataSource] = useUpdateState<unknown[]>(pDataSource)
   const [columns, setColumns] = useUpdateState<Columns[]>(pColumns)
   const [loadStatus] = useUpdateState<LoadStatus>(pLoadStatus)
-  const [scrollDiff, setScrollDiff] = useState<number>(0)
+  const [scrollDistance, setScrollDistance] = useState<number>(0)
   const [scrollDirección, setScrollDirección] = useState<ScrollDirección>(null)
 
   const getHeight = useCallback((height) => {
@@ -79,7 +80,8 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     if (Math.round(scrollHeight) === Math.round(tableHeight)) return // 无数据
     if (scrollTop === 0) return
     const diff = scrollHeight - (scrollTop + tableHeight)
-    if (diff < 30 && loadStatus != 'loading') {
+    // 小于视窗距离多少开始触发onLoad, 默认30
+    if (diff < distance && loadStatus != 'loading') {
       setTimeout(() => {
         onLoad?.(e)
       }, 300)
@@ -93,7 +95,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     const diff = scrollHeight - (Math.round(scrollTop) + clientHeight)
     const direction = scrollDetailRef.current.scrollLeft === scrollLeft ? 'x' : 'y'
     setScrollDirección(direction)
-    setScrollDiff(diff)
+    setScrollDistance(diff)
     scrollDetailRef.current = { scrollTop, scrollHeight, scrollLeft }
     props?.onScroll?.(e)
   }
@@ -180,7 +182,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     )
   }
 
-  useImperativeHandle(ref, () => ({ scrollRef, scrollDiff, scrollDirección }))
+  useImperativeHandle(ref, () => ({ scrollRef, scrollDistance, scrollDirección }))
 
   return (
     <View className={classNames(['taro-table-wrapper', wrapperClass])} style={wrapperStyle}>

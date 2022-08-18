@@ -67,6 +67,7 @@ export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
   noMoreText?: string
   loadLoadingText?: string
   onRow?: (record: T, index: number) => void
+  distance?:number
 }
 
 export type RowProps<T = unknown> = {
