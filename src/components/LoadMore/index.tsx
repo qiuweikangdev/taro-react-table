@@ -1,8 +1,16 @@
-import { forwardRef, ForwardRefRenderFunction, memo, useImperativeHandle } from 'react'
-import Taro from '@tarojs/taro'
+import {
+  forwardRef,
+  ForwardRefRenderFunction,
+  memo,
+  RefObject,
+  useImperativeHandle,
+  useRef,
+} from 'react'
 import { View, Text } from '@tarojs/components'
+import { TaroElement } from '@tarojs/runtime'
 import classNames from 'classnames'
 import Loading from '../Loading'
+import { genId } from '../../utils'
 import './index.less'
 
 export type LoadMoreProps = {
@@ -14,18 +22,24 @@ export type LoadMoreProps = {
   left?: number
 }
 
-function LoadMore({
-  status,
-  loadingText,
-  noMoreText,
-  size,
-  fixedLoad = true,
-  left,
-}: LoadMoreProps) {
+export type LoadMoreHandle = {
+  loadMoreRef: RefObject<TaroElement>
+}
+
+const LoadMore: ForwardRefRenderFunction<LoadMoreHandle, LoadMoreProps> = (
+  { status, loadingText, noMoreText, size, fixedLoad = true, left },
+  ref,
+) => {
+  const loadMoreRef = useRef<TaroElement>(null)
+
+  useImperativeHandle(ref, () => ({ loadMoreRef }))
+
   return (
     <View
       className={classNames('load-more', { ['load-more-sticky']: fixedLoad })}
       style={{ left: `${left}px` }}
+      id={genId('load-more')}
+      ref={loadMoreRef}
     >
       {status === 'loading' && <Loading text={loadingText}></Loading>}
       {status == 'noMore' && size > 0 && (
@@ -35,4 +49,4 @@ function LoadMore({
   )
 }
 
-export default memo(LoadMore)
+export default memo(forwardRef(LoadMore))

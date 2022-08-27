@@ -100,5 +100,3 @@ export type TitleProps<T = unknown> = {
   unsort?: boolean
   colWidth?: number
 }
-
-export type ScrollDirección = 'x' | 'y' | null

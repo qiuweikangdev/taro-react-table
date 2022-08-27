@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import classNames from 'classnames'
 import { View, Text } from '@tarojs/components'
-import { calculateFixedDistance, getSize } from './utils'
+import { calculateFixedDistance, getSize } from '../../utils'
 import { Columns, RowProps } from './types'
 import './index.less'
 
@@ -52,7 +52,12 @@ function Row(props: RowProps) {
               }}
               onClick={() => onRow?.(dataSourceItem, index)}
             >
-              <Text className='taro-table-col-text' onClick={()=>columnItem?.onCell?.(dataSourceItem, index)}>{result}</Text>
+              <Text
+                className='taro-table-col-text'
+                onClick={() => columnItem?.onCell?.(dataSourceItem, index)}
+              >
+                {result}
+              </Text>
             </View>
           )
         },

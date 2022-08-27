@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import classNames from 'classnames'
 import { View, Text } from '@tarojs/components'
-import { calculateFixedDistance, getSize } from './utils'
+import { calculateFixedDistance, getSize } from '../../utils'
 import { Columns, SortOrder, TitleProps } from './types'
 
 function Title(props: TitleProps) {

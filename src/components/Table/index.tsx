@@ -12,14 +12,16 @@ import classNames from 'classnames'
 
 import { BaseEventOrig, ScrollView, ScrollViewProps, View } from '@tarojs/components'
 import Taro from '@tarojs/taro'
+import { TaroElement } from '@tarojs/runtime'
 import Row from './Row'
 import Title from './Title'
 import Empty from './Empty'
 
 import Loading from '../Loading'
-import LoadMore from '../LoadMore'
+import LoadMore, { LoadMoreHandle } from '../LoadMore'
 import { useQuery, useUpdateState } from '../../hooks'
-import { ScrollDetail, LoadStatus, DataSource, TableProps, Columns, ScrollDirección } from './types'
+import { ScrollDetail, LoadStatus, DataSource, TableProps, Columns } from './types'
+import { genId } from '../../utils'
 import './index.less'
 
 const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
@@ -57,8 +59,9 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   },
   ref,
 ) => {
-  const scrollRef = useRef<HTMLElement>(null)
-  const loadRef = useRef<HTMLElement>(null)
+  const scrollRef = useRef<TaroElement>(null)
+  const loadWrapperRef = useRef<TaroElement>(null)
+  const loadMoreRef = useRef<LoadMoreHandle>(null)
   const scrollDetailRef = useRef<ScrollDetail>({
     scrollLeft: 0,
     scrollHeight: 0,
@@ -68,50 +71,39 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const [columns, setColumns] = useUpdateState<Columns[]>(pColumns)
   const [loadStatus] = useUpdateState<LoadStatus>(pLoadStatus)
   const [scrollDistance, setScrollDistance] = useState<number>(0)
-  const [scrollDirección, setScrollDirección] = useState<ScrollDirección>(null)
   const [loadLeft, setLoadLeft] = useState<number>(0)
 
-  const [, { getBoundingClientRect }] = useQuery()
-
-  const getHeight = useCallback(height => {
-    return Number(
-      height
-        .replace('calc', '')
-        .replace('(', '')
-        .replace(')', '')
-        .replace('px', ''),
-    )
-  }, [])
+  const [, { getRefSize }] = useQuery()
 
   // scroll load
-  const onScrollToLower = e => {
-    const { height = '' } = scrollRef?.current?.style || {}
-    const { scrollHeight = 0, scrollTop = 0 } = scrollDetailRef.current
-    const tableHeight = getHeight(height)
-    props?.onScrollToLower?.(e)
-    if (!showLoad) return
-    if (loadStatus === 'noMore') return // 无更多数据
-    if (Math.round(scrollHeight) === Math.round(tableHeight)) return // 无数据
-    if (scrollTop === 0) return
-    const diff = scrollHeight - (scrollTop + tableHeight)
-    // 小于视窗距离多少开始触发onLoad, 默认30
-    if (diff < distance && loadStatus != 'loading') {
-      setTimeout(() => {
-        onLoad?.(e)
-      }, 300)
+  const onScrollToLower = async e => {
+    if (scrollRef?.current) {
+      const { height: tableHeight } = await getRefSize(scrollRef?.current)
+      const { scrollHeight = 0, scrollTop = 0 } = scrollDetailRef.current
+      props?.onScrollToLower?.(e)
+      if (!showLoad) return
+      if (loadStatus === 'noMore') return // 无更多数据
+      if (Math.round(scrollHeight) === Math.round(tableHeight)) return // 无数据
+      if (scrollTop === 0) return
+      const diff = scrollHeight - (scrollTop + tableHeight)
+      // 小于视窗距离多少开始触发onLoad, 默认30
+      if (diff < distance && loadStatus != 'loading') {
+        setTimeout(() => {
+          onLoad?.(e)
+        }, 300)
+      }
     }
   }
 
-  const onScroll = (e: BaseEventOrig<ScrollViewProps.onScrollDetail>) => {
-    const { scrollTop, scrollHeight, scrollLeft } = e.detail
-    const { height = '' } = scrollRef?.current?.style || {}
-    const clientHeight = getHeight(height)
-    const diff = scrollHeight - (Math.round(scrollTop) + clientHeight)
-    const direction = scrollDetailRef.current.scrollLeft === scrollLeft ? 'x' : 'y'
-    setScrollDirección(direction)
-    setScrollDistance(diff)
-    scrollDetailRef.current = { scrollTop, scrollHeight, scrollLeft }
-    props?.onScroll?.(e)
+  const onScroll = async (e: BaseEventOrig<ScrollViewProps.onScrollDetail>) => {
+    if (scrollRef?.current) {
+      const { scrollTop, scrollHeight, scrollLeft } = e.detail
+      const { height: tableHeight } = await getRefSize(scrollRef?.current)
+      const diff = scrollHeight - (Math.round(scrollTop) + tableHeight)
+      setScrollDistance(diff)
+      scrollDetailRef.current = { scrollTop, scrollHeight, scrollLeft }
+      props?.onScroll?.(e)
+    }
   }
 
   const renderTableHead = () => {
@@ -185,7 +177,11 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
 
   const renderTableLoad = () => {
     return (
-      <View className='taro-table-load-wrapper' ref={loadRef}>
+      <View
+        className='taro-table-load-wrapper'
+        ref={loadWrapperRef}
+        id={genId('taro-table-load-wrapper')}
+      >
         <LoadMore
           status={loadStatus}
           size={dataSource.length}
@@ -193,6 +189,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
           loadingText={loadLoadingText}
           fixedLoad={fixedLoad}
           left={loadLeft}
+          ref={loadMoreRef}
         ></LoadMore>
       </View>
     )
@@ -201,18 +198,16 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   // fixed table load
   const stickyTableLoad = useCallback(async () => {
     if (loadStatus && fixedLoad) {
-      const { width: wrapWidth } = await getBoundingClientRect(
-        '.taro-table-wrapper .taro-table-load-wrapper',
-      )
-      const { width: loadWidth } = await getBoundingClientRect(
-        '.taro-table-wrapper .taro-table-load-wrapper .load-more-sticky',
-      )
-      if (wrapWidth && loadWidth) {
-        const left = Math.round(wrapWidth / 2) - Math.round(loadWidth / 2)
-        setLoadLeft(left)
+      if (loadWrapperRef.current && loadMoreRef.current?.loadMoreRef.current) {
+        const { width: wrapWidth } = await getRefSize(loadWrapperRef.current)
+        const { width: loadWidth } = await getRefSize(loadMoreRef.current.loadMoreRef.current)
+        if (wrapWidth && loadWidth) {
+          const left = Math.round(wrapWidth / 2) - Math.round(loadWidth / 2)
+          setLoadLeft(left)
+        }
       }
     }
-  }, [getBoundingClientRect, loadStatus, fixedLoad])
+  }, [getRefSize, loadStatus, fixedLoad])
 
   useEffect(() => {
     Taro.nextTick(() => {
@@ -220,7 +215,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     })
   }, [stickyTableLoad])
 
-  useImperativeHandle(ref, () => ({ scrollRef, scrollDistance, scrollDirección }))
+  useImperativeHandle(ref, () => ({ scrollRef, scrollDistance }))
 
   return (
     <View className={classNames(['taro-table-wrapper', wrapperClass])} style={wrapperStyle}>
@@ -238,6 +233,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
         style={{ ...style, overflow: 'auto' }}
         onScrollToLower={onScrollToLower}
         onScroll={onScroll}
+        id={genId('taro-table-scroll')}
       >
         <View className='taro-table-content-wrapper'>
           {showHeader && columns.length > 0 && renderTableHead()}
