@@ -40,3 +40,4 @@ export function calculateFixedDistance(options: {
   }
   return getSize(result);
 }
+

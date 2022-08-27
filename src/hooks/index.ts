@@ -1,3 +1,4 @@
 import useUpdateState from './useUpdateState'
+import useQuery from './useQuery'
 
-export { useUpdateState }
+export { useUpdateState, useQuery }
