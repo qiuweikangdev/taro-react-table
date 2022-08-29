@@ -73,8 +73,17 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const [loadStatus] = useUpdateState<LoadStatus>(pLoadStatus)
   const [scrollDistance, setScrollDistance] = useState<number>(0)
   const [loadLeft, setLoadLeft] = useState<number>(0)
+  const [firstLoadWidth, setFirstLoadWidth] = useState<number>(0)
 
   const [, { getRefSize }] = useQuery()
+
+  // first render tableload
+  const getFirstLoadWidth = useCallback(async () => {
+    if (showLoad && loadWrapperRef.current) {
+      const { width } = await getRefSize(loadWrapperRef.current)
+      setFirstLoadWidth(width)
+    }
+  }, [getRefSize, showLoad])
 
   // scroll load
   const onScrollToLower = async e => {
@@ -100,6 +109,10 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     if (scrollRef?.current) {
       const { scrollTop, scrollHeight, scrollLeft } = e.detail
       const { height: tableHeight } = await getRefSize(scrollRef?.current)
+      if (showLoad && loadWrapperRef?.current) {
+        loadWrapperRef.current.style.width = `${firstLoadWidth + scrollLeft}px`
+        // loadWrapperRef.current.style.maxWidth
+      }
       const diff = scrollHeight - (Math.round(scrollTop) + tableHeight)
       setScrollDistance(diff)
       scrollDetailRef.current = { scrollTop, scrollHeight, scrollLeft }
@@ -179,8 +192,8 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const renderTableLoad = () => {
     return (
       <View
-        className='taro-table-load-wrapper'
         ref={loadWrapperRef}
+        className='taro-table-load-wrapper'
         id={genId('taro-table-load-wrapper')}
       >
         <LoadMore
@@ -211,10 +224,11 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   }, [getRefSize, loadStatus, fixedLoad])
 
   useEffect(() => {
-    Taro.nextTick(() => {
+    Taro.nextTick(async () => {
+      await getFirstLoadWidth()
       stickyTableLoad()
     })
-  }, [stickyTableLoad])
+  }, [getFirstLoadWidth, stickyTableLoad])
 
   useImperativeHandle(ref, () => ({ scrollRef, scrollDistance }))
 
