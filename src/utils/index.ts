@@ -42,5 +42,5 @@ export function calculateFixedDistance(options: {
 }
 
 export function genId(id) {
-  return `taro-react-table__${id}`
+  return `taro-react-table__${Number(Math.random().toString().substring(2) + Date.now()).toString(36)}_${id}`
 }
