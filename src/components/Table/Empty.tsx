@@ -1,13 +1,17 @@
-import { memo } from 'react';
-import { View, Text } from '@tarojs/components';
-import './index.less';
+import { memo, ReactNode } from 'react'
+import { View, Text } from '@tarojs/components'
+import './index.less'
 
-function Empty(props) {
-  return (
-    <View className='taro-table-empty'>
-      <Text>暂无数据</Text>
-    </View>
-  );
+export type EmptyProps = {
+  text?: string | ReactNode
 }
 
-export default memo(Empty);
+function Empty({ text = '暂无数据' }: EmptyProps) {
+  return (
+    <View className='taro-table-empty'>
+      <Text>{text}</Text>
+    </View>
+  )
+}
+
+export default memo(Empty)

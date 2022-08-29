@@ -55,6 +55,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     distance = 30,
     showLoad = true,
     fixedLoad = true, // 是否固定加载更多，不随X轴滚动而滚动
+    emptyText,
     ...props
   },
   ref,
@@ -114,7 +115,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
         })}
       >
         {columns.length === 0 ? (
-          <Empty />
+          <Empty text={emptyText} />
         ) : (
           columns.map(
             (item: Columns, index: number): JSX.Element => {
@@ -170,7 +171,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
                 )
               },
             )
-          : loadStatus != 'loading' && <Empty />}
+          : loadStatus != 'loading' && <Empty text={emptyText} />}
       </View>
     )
   }
