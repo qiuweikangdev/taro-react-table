@@ -12,7 +12,7 @@ export type getBoundingClientRectType = (
 ) => Promise<NodesRef.BoundingClientRectCallbackResult>
 
 export type getRefSizeType = (
-  element: TaroElement,
+  element: TaroElement | HTMLElement,
 ) => Promise<NodesRef.BoundingClientRectCallbackResult>
 
 function useQuery(): [SelectorQuery, SelectorMethod] {
