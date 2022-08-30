@@ -63,6 +63,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const loadWrapperRef = useRef<HTMLElement>(null)
   const loadMoreRef = useRef<LoadMoreHandle>(null)
   const headRef = useRef<HTMLElement>(null)
+  const emptyRef = useRef<HTMLElement>(null)
   const scrollDetailRef = useRef<ScrollDetail>({
     scrollLeft: 0,
     scrollHeight: 0,
@@ -72,18 +73,21 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const [columns, setColumns] = useUpdateState<Columns[]>(pColumns)
   const [loadStatus] = useUpdateState<LoadStatus>(pLoadStatus)
   const [scrollDistance, setScrollDistance] = useState<number>(0)
-  const [loadLeft, setLoadLeft] = useState<number>(0)
-  const [firstLoadWidth, setFirstLoadWidth] = useState<number>(0)
+  const [fixedLeft, setFixedLeft] = useState<number>(0)
+  const [firstWidth, setFirstWidth] = useState<number>(0)
 
   const [, { getRefSize }] = useQuery()
 
-  // first render tableload
-  const getFirstLoadWidth = useCallback(async () => {
-    if (showLoad && loadWrapperRef.current) {
-      const { width } = await getRefSize(loadWrapperRef.current)
-      setFirstLoadWidth(width)
-    }
-  }, [getRefSize, showLoad])
+  // first render table load/table empty
+  const getFirstWidth = useCallback(
+    async dom => {
+      if (showLoad && dom) {
+        const { width } = await getRefSize(dom)
+        setFirstWidth(width)
+      }
+    },
+    [getRefSize, showLoad],
+  )
 
   // scroll load
   const onScrollToLower = async e => {
@@ -110,16 +114,33 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
       const { scrollTop, scrollHeight, scrollLeft } = e.detail
       const { height: tableHeight } = await getRefSize(scrollRef?.current)
       if (showLoad && headRef?.current && loadWrapperRef.current) {
-        const totalWidth = firstLoadWidth + scrollLeft
-        const { width: headWidth } = await getRefSize(headRef.current)
-        loadWrapperRef.current.style.width = `${totalWidth}px`
-        loadWrapperRef.current.style.maxWidth = `${headWidth}px`
+        onScrollFixed({ scrollLeft, fixedDomRef: loadWrapperRef })
+      }
+      if (!dataSource.length && emptyRef) {
+        onScrollFixed({ scrollLeft, fixedDomRef: emptyRef })
       }
       const diff = scrollHeight - (Math.round(scrollTop) + tableHeight)
       setScrollDistance(diff)
       scrollDetailRef.current = { scrollTop, scrollHeight, scrollLeft }
       props?.onScroll?.(e)
     }
+  }
+
+  const onScrollFixed = async ({ scrollLeft, fixedDomRef }) => {
+    if (headRef.current && fixedDomRef) {
+      const totalWidth = firstWidth + scrollLeft
+      const { width: headWidth } = await getRefSize(headRef.current)
+      fixedDomRef.current.style.width = `${totalWidth}px`
+      fixedDomRef.current.style.maxWidth = `${headWidth}px`
+    }
+  }
+
+  const renderTableEmpty = () => {
+    return (
+      <View ref={emptyRef} className='taro-table-empty-wrapper' id={genId('taro-table-head')}>
+        <Empty text={emptyText} left={fixedLeft} />
+      </View>
+    )
   }
 
   const renderTableHead = () => {
@@ -131,28 +152,26 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
         })}
         id={genId('taro-table-head')}
       >
-        {columns.length === 0 ? (
-          <Empty text={emptyText} />
-        ) : (
-          columns.map(
-            (item: Columns, index: number): JSX.Element => {
-              return (
-                <Title
-                  key={item.key || item.dataIndex}
-                  columns={columns}
-                  column={item}
-                  setColumns={setColumns}
-                  onSorter={onSorter}
-                  unsort={unsort}
-                  index={index}
-                  colWidth={colWidth}
-                  setDataSource={setDataSource}
-                  dataSource={dataSource}
-                />
-              )
-            },
-          )
-        )}
+        {columns.length === 0
+          ? renderTableEmpty()
+          : columns.map(
+              (item: Columns, index: number): JSX.Element => {
+                return (
+                  <Title
+                    key={item.key || item.dataIndex}
+                    columns={columns}
+                    column={item}
+                    setColumns={setColumns}
+                    onSorter={onSorter}
+                    unsort={unsort}
+                    index={index}
+                    colWidth={colWidth}
+                    setDataSource={setDataSource}
+                    dataSource={dataSource}
+                  />
+                )
+              },
+            )}
       </View>
     )
   }
@@ -188,7 +207,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
                 )
               },
             )
-          : loadStatus != 'loading' && <Empty text={emptyText} />}
+          : loadStatus != 'loading' && renderTableEmpty()}
       </View>
     )
   }
@@ -206,7 +225,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
           noMoreText={noMoreText}
           loadingText={loadLoadingText}
           fixedLoad={fixedLoad}
-          left={loadLeft}
+          left={fixedLeft}
           ref={loadMoreRef}
         ></LoadMore>
       </View>
@@ -218,30 +237,45 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     if (fixedLoad && showLoad && loadStatus) {
       if (loadWrapperRef.current && loadMoreRef.current?.loadMoreRef.current) {
         const { width: loadWidth } = await getRefSize(loadMoreRef.current.loadMoreRef.current)
-        if (firstLoadWidth && loadWidth) {
-          const left = Math.round(firstLoadWidth / 2) - Math.round(loadWidth / 2)
-          console.log('3')
-          setLoadLeft(left)
+        if (firstWidth && loadWidth) {
+          const left = Math.round(firstWidth / 2) - Math.round(loadWidth / 2)
+          setFixedLeft(left)
         }
       }
     }
-  }, [fixedLoad, showLoad, getRefSize, loadStatus, firstLoadWidth])
+  }, [fixedLoad, showLoad, getRefSize, loadStatus, firstWidth])
+
+  // fixed table empty
+  const stickyTableEmpty = useCallback(async () => {
+    if (!dataSource.length && emptyRef.current) {
+      const { width: emptyWidth } = await getRefSize(emptyRef.current)
+      if (firstWidth && emptyWidth) {
+        const left = Math.round(firstWidth / 2) - Math.round(emptyWidth / 2)
+        setFixedLeft(left)
+      }
+    }
+  }, [dataSource.length, firstWidth, getRefSize])
 
   useEffect(() => {
     Taro.nextTick(async () => {
       stickyTableLoad()
+      stickyTableEmpty()
     })
-  }, [stickyTableLoad])
+  }, [stickyTableEmpty, stickyTableLoad])
 
   useMount(() => {
-    getFirstLoadWidth()
+    console.log(
+      loadWrapperRef.current || emptyRef.current,
+      'loadWrapperRef.current || emptyRef.current',
+    )
+    getFirstWidth(loadWrapperRef.current || emptyRef.current)
   })
 
   //  initialize sticky load left
   useEffect(() => {
-    const left = Math.round(firstLoadWidth / 2) - Math.round(100 / 2)
-    setLoadLeft(left)
-  }, [firstLoadWidth])
+    const left = Math.round(firstWidth / 2) - Math.round(100 / 2)
+    setFixedLeft(left)
+  }, [firstWidth])
 
   useImperativeHandle(ref, () => ({ scrollRef, scrollDistance }))
 
