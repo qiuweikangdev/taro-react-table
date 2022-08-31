@@ -7,6 +7,7 @@ import {
   ForwardRefRenderFunction,
   useCallback,
   useEffect,
+  useMemo,
 } from 'react'
 import classNames from 'classnames'
 
@@ -18,9 +19,8 @@ import Empty from './Empty'
 
 import Loading from '../Loading'
 import LoadMore, { LoadMoreHandle } from '../LoadMore'
-import { useQuery, useUpdateState, useMount } from '../../hooks'
+import { useQuery, useUpdateState, useMount, useUniqueId, useRendered } from '../../hooks'
 import { ScrollDetail, LoadStatus, DataSource, TableProps, Columns } from './types'
-import { genId } from '../../utils'
 import './index.less'
 
 const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
@@ -77,6 +77,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const [firstWidth, setFirstWidth] = useState<number>(0)
 
   const [, { getRefSize }] = useQuery()
+  const genId = useUniqueId()
 
   // first render table load/table empty
   const getFirstWidth = useCallback(
@@ -113,11 +114,13 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     if (scrollRef?.current) {
       const { scrollTop, scrollHeight, scrollLeft } = e.detail
       const { height: tableHeight } = await getRefSize(scrollRef?.current)
-      if (showLoad && headRef?.current && loadWrapperRef.current) {
-        onScrollFixed({ scrollLeft, fixedDomRef: loadWrapperRef })
-      }
-      if (!dataSource.length && emptyRef) {
-        onScrollFixed({ scrollLeft, fixedDomRef: emptyRef })
+      if (scrollLeft) {
+        if (showLoad && headRef?.current && loadWrapperRef.current) {
+          onScrollFixed({ scrollLeft, fixedDomRef: loadWrapperRef })
+        }
+        if (!dataSource.length && emptyRef) {
+          onScrollFixed({ scrollLeft, fixedDomRef: emptyRef })
+        }
       }
       const diff = scrollHeight - (Math.round(scrollTop) + tableHeight)
       setScrollDistance(diff)
@@ -135,7 +138,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     }
   }
 
-  const renderTableEmpty = () => {
+  const renderTableEmpty = useRendered(() => {
     return (
       <View
         ref={emptyRef}
@@ -145,9 +148,9 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
         <Empty text={emptyText} left={fixedLeft} />
       </View>
     )
-  }
+  })
 
-  const renderTableHead = () => {
+  const renderTableHead = useRendered(() => {
     return (
       <View
         ref={headRef}
@@ -157,7 +160,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
         id={genId('taro-table-head')}
       >
         {columns.length === 0
-          ? renderTableEmpty()
+          ? renderTableEmpty
           : columns.map(
               (item: Columns, index: number): JSX.Element => {
                 return (
@@ -178,9 +181,9 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
             )}
       </View>
     )
-  }
+  })
 
-  const renderTableBody = () => {
+  const renderTableBody = useRendered(() => {
     return (
       <View className='taro-table-body'>
         {dataSource.length > 0 && columns.length > 0
@@ -211,12 +214,12 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
                 )
               },
             )
-          : loadStatus != 'loading' && renderTableEmpty()}
+          : loadStatus != 'loading' && renderTableEmpty}
       </View>
     )
-  }
+  })
 
-  const renderTableLoad = () => {
+  const renderTableLoad = useRendered(() => {
     return (
       <View
         ref={loadWrapperRef}
@@ -234,7 +237,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
         ></LoadMore>
       </View>
     )
-  }
+  })
 
   // fixed table load
   const stickyTableLoad = useCallback(async () => {
@@ -308,9 +311,9 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
         id={genId('taro-table-scroll')}
       >
         <View className='taro-table-content-wrapper'>
-          {showHeader && columns.length > 0 && renderTableHead()}
-          {renderTableBody()}
-          {showLoad && renderTableLoad()}
+          {showHeader && columns.length > 0 && renderTableHead}
+          {renderTableBody}
+          {showLoad && renderTableLoad}
         </View>
       </ScrollView>
     </View>

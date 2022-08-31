@@ -6,10 +6,6 @@ export type SelectorMethod = {
   getRefSize: getRefSizeType
 }
 
-export type getBoundingClientRectType = (
-  selector: string,
-) => Promise<NodesRef.BoundingClientRectCallbackResult>
-
 export type getRefSizeType = (
   element: TaroElement | HTMLElement,
 ) => Promise<NodesRef.BoundingClientRectCallbackResult>
@@ -32,7 +28,7 @@ function useQuery(): [SelectorQuery, SelectorMethod] {
         } else {
           try {
             let selectorQuery = querySelector('#' + element.id).boundingClientRect(result =>
-              resolve(result),
+              resolve(result || {}),
             )
             selectorQuery.exec()
           } catch (e) {

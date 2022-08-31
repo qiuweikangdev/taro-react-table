@@ -10,7 +10,7 @@ import { View, Text } from '@tarojs/components'
 import { TaroElement } from '@tarojs/runtime'
 import classNames from 'classnames'
 import Loading from '../Loading'
-import { genId } from '../../utils'
+import { useUniqueId } from '../../hooks'
 import './index.less'
 
 export type LoadMoreProps = {
@@ -31,6 +31,7 @@ const LoadMore: ForwardRefRenderFunction<LoadMoreHandle, LoadMoreProps> = (
   ref,
 ) => {
   const loadMoreRef = useRef<TaroElement>(null)
+  const genId = useUniqueId()
 
   useImperativeHandle(ref, () => ({ loadMoreRef }))
 
