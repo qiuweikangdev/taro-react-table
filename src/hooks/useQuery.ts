@@ -26,13 +26,15 @@ function useQuery(): [SelectorQuery, SelectorMethod] {
   )
 
   const getBoundingClientRect = useCallback<getBoundingClientRectType>(
-    (selector) => {
+    selector => {
       return new Promise((resolve, reject) => {
         if (!selector) {
           reject({})
         } else {
           try {
-            let selectorQuery = querySelector(selector).boundingClientRect(resolve)
+            let selectorQuery = querySelector(selector).boundingClientRect(result =>
+              resolve(result || {}),
+            )
             selectorQuery.exec()
           } catch (e) {
             reject(e)

@@ -137,7 +137,11 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
 
   const renderTableEmpty = () => {
     return (
-      <View ref={emptyRef} className='taro-table-empty-wrapper' id={genId('taro-table-head')}>
+      <View
+        ref={emptyRef}
+        className='taro-table-empty-wrapper'
+        id={genId('taro-table-empty-wrapper')}
+      >
         <Empty text={emptyText} left={fixedLeft} />
       </View>
     )
