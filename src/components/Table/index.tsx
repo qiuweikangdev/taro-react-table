@@ -256,6 +256,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     }
   }, [dataSource.length, firstWidth, getRefSize])
 
+  // fixed
   useEffect(() => {
     Taro.nextTick(async () => {
       stickyTableLoad()
@@ -264,17 +265,22 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   }, [stickyTableEmpty, stickyTableLoad])
 
   useMount(() => {
-    console.log(
-      loadWrapperRef.current || emptyRef.current,
-      'loadWrapperRef.current || emptyRef.current',
-    )
     getFirstWidth(loadWrapperRef.current || emptyRef.current)
   })
 
+  // re-render firstWidth
+  useEffect(() => {
+    if (columns.length && firstWidth === 0) {
+      getFirstWidth(loadWrapperRef.current || emptyRef.current)
+    }
+  }, [columns, firstWidth, getFirstWidth])
+
   //  initialize sticky load left
   useEffect(() => {
-    const left = Math.round(firstWidth / 2) - Math.round(100 / 2)
-    setFixedLeft(left)
+    if (firstWidth) {
+      const left = Math.round(firstWidth / 2) - Math.round(100 / 2)
+      setFixedLeft(left)
+    }
   }, [firstWidth])
 
   useImperativeHandle(ref, () => ({ scrollRef, scrollDistance }))
