@@ -14,7 +14,7 @@ import { BaseEventOrig, ScrollView, ScrollViewProps, View } from '@tarojs/compon
 import Taro from '@tarojs/taro'
 import Row from './Row'
 import Title from './Title'
-import Empty from './Empty'
+import Empty, { EmptyHandle } from './Empty'
 
 import Loading from '../Loading'
 import LoadMore, { LoadMoreHandle } from '../LoadMore'
@@ -62,7 +62,8 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const loadWrapperRef = useRef<HTMLElement>(null)
   const loadMoreRef = useRef<LoadMoreHandle>(null)
   const headRef = useRef<HTMLElement>(null)
-  const emptyRef = useRef<HTMLElement>(null)
+  const emptyWrapperRef = useRef<HTMLElement>(null)
+  const emptyRef = useRef<EmptyHandle>(null)
   const scrollDetailRef = useRef<ScrollDetail>({
     scrollLeft: 0,
     scrollHeight: 0,
@@ -113,13 +114,11 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     if (scrollRef?.current) {
       const { scrollTop, scrollHeight, scrollLeft } = e.detail
       const { height: tableHeight } = await getRefSize(scrollRef?.current)
-      if (scrollLeft) {
-        if (showLoad && headRef?.current && loadWrapperRef.current) {
-          onScrollFixed({ scrollLeft, fixedDomRef: loadWrapperRef })
-        }
-        if (!dataSource.length && emptyRef) {
-          onScrollFixed({ scrollLeft, fixedDomRef: emptyRef })
-        }
+      if (showLoad && headRef?.current && loadWrapperRef.current) {
+        onScrollFixed({ scrollLeft, fixedDomRef: loadWrapperRef })
+      }
+      if (!dataSource.length && emptyWrapperRef) {
+        onScrollFixed({ scrollLeft, fixedDomRef: emptyWrapperRef })
       }
       const diff = scrollHeight - (Math.round(scrollTop) + tableHeight)
       setScrollDistance(diff)
@@ -136,15 +135,14 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
       fixedDomRef.current.style.maxWidth = `${headWidth}px`
     }
   }
-
   const renderTableEmpty = useRendered(() => {
     return (
       <View
-        ref={emptyRef}
+        ref={emptyWrapperRef}
         className='taro-table-empty-wrapper'
         id={genId('taro-table-empty-wrapper')}
       >
-        <Empty text={emptyText} left={fixedLeft} />
+        <Empty text={emptyText} left={fixedLeft} ref={emptyRef} />
       </View>
     )
   })
@@ -253,8 +251,8 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
 
   // fixed table empty
   const stickyTableEmpty = useCallback(async () => {
-    if (!dataSource.length && emptyRef.current) {
-      const { width: emptyWidth } = await getRefSize(emptyRef.current)
+    if (!dataSource.length && emptyRef.current?.emptyRef.current) {
+      const { width: emptyWidth } = await getRefSize(emptyRef.current?.emptyRef.current)
       if (firstWidth && emptyWidth) {
         const left = Math.round(firstWidth / 2) - Math.round(emptyWidth / 2)
         setFixedLeft(left)
@@ -264,30 +262,24 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
 
   // fixed
   useEffect(() => {
-    Taro.nextTick(async () => {
+    Taro.nextTick(() => {
       stickyTableLoad()
       stickyTableEmpty()
     })
   }, [stickyTableEmpty, stickyTableLoad])
 
   useMount(() => {
-    getFirstWidth(loadWrapperRef.current || emptyRef.current)
+    Taro.nextTick(() => {
+      getFirstWidth(loadWrapperRef.current || emptyWrapperRef.current)
+    })
   })
 
   // re-render firstWidth
   useEffect(() => {
     if (columns.length && firstWidth === 0) {
-      getFirstWidth(loadWrapperRef.current || emptyRef.current)
+      getFirstWidth(loadWrapperRef.current || emptyWrapperRef.current)
     }
   }, [columns, firstWidth, getFirstWidth])
-
-  //  initialize sticky load left
-  useEffect(() => {
-    if (firstWidth) {
-      const left = Math.round(firstWidth / 2) - Math.round(100 / 2)
-      setFixedLeft(left)
-    }
-  }, [firstWidth])
 
   useImperativeHandle(ref, () => ({ scrollRef, scrollDistance }))
 
@@ -312,7 +304,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
         <View className='taro-table-content-wrapper'>
           {showHeader && columns.length > 0 && renderTableHead}
           {renderTableBody}
-          {showLoad && renderTableLoad}
+          {showLoad && dataSource.length > 0 && renderTableLoad}
         </View>
       </ScrollView>
     </View>
