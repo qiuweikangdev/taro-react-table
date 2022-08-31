@@ -3,7 +3,6 @@ import { TaroElement } from '@tarojs/runtime'
 import { useCallback, useRef } from 'react'
 
 export type SelectorMethod = {
-  getBoundingClientRect: getBoundingClientRectType
   getRefSize: getRefSizeType
 }
 
@@ -25,26 +24,6 @@ function useQuery(): [SelectorQuery, SelectorMethod] {
     [query],
   )
 
-  const getBoundingClientRect = useCallback<getBoundingClientRectType>(
-    selector => {
-      return new Promise((resolve, reject) => {
-        if (!selector) {
-          reject({})
-        } else {
-          try {
-            let selectorQuery = querySelector(selector).boundingClientRect(result =>
-              resolve(result || {}),
-            )
-            selectorQuery.exec()
-          } catch (e) {
-            reject(e)
-          }
-        }
-      })
-    },
-    [querySelector],
-  )
-
   const getRefSize = useCallback<getRefSizeType>(
     (element: TaroElement) => {
       return new Promise((resolve, reject) => {
@@ -52,7 +31,9 @@ function useQuery(): [SelectorQuery, SelectorMethod] {
           reject({})
         } else {
           try {
-            let selectorQuery = querySelector('#' + element.id).boundingClientRect(resolve)
+            let selectorQuery = querySelector('#' + element.id).boundingClientRect(result =>
+              resolve(result),
+            )
             selectorQuery.exec()
           } catch (e) {
             reject(e)
@@ -66,7 +47,6 @@ function useQuery(): [SelectorQuery, SelectorMethod] {
   return [
     query.current,
     {
-      getBoundingClientRect,
       getRefSize,
     },
   ]
