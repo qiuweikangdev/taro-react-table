@@ -18,7 +18,7 @@ import Empty, { EmptyHandle } from './Empty'
 
 import Loading from '../Loading'
 import LoadMore, { LoadMoreHandle } from '../LoadMore'
-import { useQuery, useUpdateState, useMount, useUniqueId, useRendered } from '../../hooks'
+import { useQuery, useUpdateState, useUniqueId, useRendered } from '../../hooks'
 import { ScrollDetail, LoadStatus, DataSource, TableProps, Columns } from './types'
 import './index.less'
 
@@ -268,17 +268,13 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     })
   }, [stickyTableEmpty, stickyTableLoad])
 
-  useMount(() => {
-    Taro.nextTick(() => {
-      getFirstWidth(loadWrapperRef.current || emptyWrapperRef.current)
-    })
-  })
-
   // re-render firstWidth
   useEffect(() => {
-    if (columns.length && firstWidth === 0) {
-      getFirstWidth(loadWrapperRef.current || emptyWrapperRef.current)
-    }
+    Taro.nextTick(() => {
+      if (columns.length && firstWidth === 0) {
+        getFirstWidth(loadWrapperRef.current || emptyWrapperRef.current)
+      }
+    })
   }, [columns, firstWidth, getFirstWidth])
 
   useImperativeHandle(ref, () => ({ scrollRef, scrollDistance }))
