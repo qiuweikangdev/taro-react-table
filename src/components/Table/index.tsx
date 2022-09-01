@@ -220,8 +220,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
 
   const renderTableLoad = useRendered(() => {
     return (
-      showLoad &&
-      dataSource.length > 0 && (
+      showLoad && (
         <View
           ref={loadWrapperRef}
           className='taro-table-load-wrapper'
