@@ -80,15 +80,13 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const genId = useUniqueId()
 
   // first render table load/table empty
-  const getFirstWidth = useCallback(
-    async dom => {
-      if (showLoad && dom) {
-        const { width } = await getRefSize(dom)
-        setFirstWidth(width)
-      }
-    },
-    [getRefSize, showLoad],
-  )
+  const getFirstWidth = useCallback(async () => {
+    const dom = loadWrapperRef.current || emptyWrapperRef.current
+    if (!firstWidth && dom) {
+      const { width } = await getRefSize(dom)
+      setFirstWidth(width)
+    }
+  }, [firstWidth, getRefSize])
 
   // scroll load
   const onScrollToLower = async e => {
@@ -135,6 +133,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
       fixedDomRef.current.style.maxWidth = `${headWidth}px`
     }
   }
+
   const renderTableEmpty = useRendered(() => {
     return (
       <View
@@ -276,10 +275,10 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
 
   // re-render firstWidth
   useEffect(() => {
-    if (columns.length && !firstWidth) {
-      getFirstWidth(loadWrapperRef.current || emptyWrapperRef.current)
+    if (!dataSource.length || loadStatus || (fixedLoad && showLoad)) {
+      getFirstWidth()
     }
-  }, [columns, firstWidth, getFirstWidth])
+  }, [dataSource.length, fixedLoad, getFirstWidth, loadStatus, showLoad])
 
   useImperativeHandle(ref, () => ({ scrollRef, scrollDistance }))
 
