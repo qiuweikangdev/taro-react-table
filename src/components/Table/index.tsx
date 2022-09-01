@@ -149,34 +149,37 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
 
   const renderTableHead = useRendered(() => {
     return (
-      <View
-        ref={headRef}
-        className={classNames(['taro-table-head'], {
-          'taro-table-head-scroll': scrollY,
-        })}
-        id={genId('taro-table-head')}
-      >
-        {columns.length === 0
-          ? renderTableEmpty
-          : columns.map(
-              (item: Columns, index: number): JSX.Element => {
-                return (
-                  <Title
-                    key={item.key || item.dataIndex}
-                    columns={columns}
-                    column={item}
-                    setColumns={setColumns}
-                    onSorter={onSorter}
-                    unsort={unsort}
-                    index={index}
-                    colWidth={colWidth}
-                    setDataSource={setDataSource}
-                    dataSource={dataSource}
-                  />
-                )
-              },
-            )}
-      </View>
+      showHeader &&
+      columns.length > 0 && (
+        <View
+          ref={headRef}
+          className={classNames(['taro-table-head'], {
+            'taro-table-head-scroll': scrollY,
+          })}
+          id={genId('taro-table-head')}
+        >
+          {columns.length === 0
+            ? renderTableEmpty
+            : columns.map(
+                (item: Columns, index: number): JSX.Element => {
+                  return (
+                    <Title
+                      key={item.key || item.dataIndex}
+                      columns={columns}
+                      column={item}
+                      setColumns={setColumns}
+                      onSorter={onSorter}
+                      unsort={unsort}
+                      index={index}
+                      colWidth={colWidth}
+                      setDataSource={setDataSource}
+                      dataSource={dataSource}
+                    />
+                  )
+                },
+              )}
+        </View>
+      )
     )
   })
 
@@ -218,21 +221,24 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
 
   const renderTableLoad = useRendered(() => {
     return (
-      <View
-        ref={loadWrapperRef}
-        className='taro-table-load-wrapper'
-        id={genId('taro-table-load-wrapper')}
-      >
-        <LoadMore
-          status={loadStatus}
-          size={dataSource.length}
-          noMoreText={noMoreText}
-          loadingText={loadLoadingText}
-          fixedLoad={fixedLoad}
-          left={fixedLeft}
-          ref={loadMoreRef}
-        ></LoadMore>
-      </View>
+      showLoad &&
+      dataSource.length > 0 && (
+        <View
+          ref={loadWrapperRef}
+          className='taro-table-load-wrapper'
+          id={genId('taro-table-load-wrapper')}
+        >
+          <LoadMore
+            status={loadStatus}
+            size={dataSource.length}
+            noMoreText={noMoreText}
+            loadingText={loadLoadingText}
+            fixedLoad={fixedLoad}
+            left={fixedLeft}
+            ref={loadMoreRef}
+          ></LoadMore>
+        </View>
+      )
     )
   })
 
@@ -270,11 +276,9 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
 
   // re-render firstWidth
   useEffect(() => {
-    Taro.nextTick(() => {
-      if (columns.length && firstWidth === 0) {
-        getFirstWidth(loadWrapperRef.current || emptyWrapperRef.current)
-      }
-    })
+    if (columns.length && !firstWidth) {
+      getFirstWidth(loadWrapperRef.current || emptyWrapperRef.current)
+    }
   }, [columns, firstWidth, getFirstWidth])
 
   useImperativeHandle(ref, () => ({ scrollRef, scrollDistance }))
@@ -298,9 +302,9 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
         id={genId('taro-table-scroll')}
       >
         <View className='taro-table-content-wrapper'>
-          {showHeader && columns.length > 0 && renderTableHead}
+          {renderTableHead}
           {renderTableBody}
-          {showLoad && dataSource.length > 0 && renderTableLoad}
+          {renderTableLoad}
         </View>
       </ScrollView>
     </View>
