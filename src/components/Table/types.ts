@@ -71,6 +71,7 @@ export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
   showLoad?: boolean
   fixedLoad?: boolean
   emptyText?: string
+  cellEmptyText?: string
 }
 
 export type RowProps<T = unknown> = {
@@ -85,6 +86,7 @@ export type RowProps<T = unknown> = {
   borderBottom?: boolean
   colWidth?: number
   onRow?: (record: T, index: number) => void
+  cellEmptyText?: string
 }
 
 export type TitleProps<T = unknown> = {

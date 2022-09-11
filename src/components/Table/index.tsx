@@ -53,6 +53,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     showLoad = true,
     fixedLoad = true, // 是否固定加载更多，不随横向滚动而滚动
     emptyText,
+    cellEmptyText,
     ...props
   },
   ref,
@@ -197,6 +198,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
                     index={index}
                     colWidth={colWidth}
                     onRow={onRow}
+                    cellEmptyText={cellEmptyText}
                   />
                 )
               },

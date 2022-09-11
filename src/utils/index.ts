@@ -22,7 +22,7 @@ export function calculateFixedDistance(options: {
   const { fixedType, index, columns, colWidth = 0 } = options
   let result: number = 0
   if (fixedType === 'left') {
-    result = columns.reduce(function(prev, cur, i) {
+    result = columns.reduce(function (prev, cur, i) {
       if (i + 1 <= index) {
         return prev + (cur.width || colWidth)
       } else {
@@ -30,7 +30,7 @@ export function calculateFixedDistance(options: {
       }
     }, 0)
   } else {
-    result = columns.reduceRight(function(prev, cur, i) {
+    result = columns.reduceRight(function (prev, cur, i) {
       if (i - 1 >= index) {
         return prev + (cur.width || colWidth)
       } else {
@@ -39,4 +39,8 @@ export function calculateFixedDistance(options: {
     }, 0)
   }
   return getSize(result)
+}
+
+export function isNil(value) {
+  return value == null
 }

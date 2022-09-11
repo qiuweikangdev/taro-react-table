@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import classNames from 'classnames'
 import { View, Text } from '@tarojs/components'
-import { calculateFixedDistance, getSize } from '../../utils'
+import { calculateFixedDistance, getSize, isNil } from '../../utils'
 import { Columns, RowProps } from './types'
 import './index.less'
 
@@ -15,6 +15,7 @@ function Row(props: RowProps) {
     columns,
     index,
     colWidth = 0,
+    cellEmptyText = '-',
     onRow,
   } = props
   return (
@@ -27,7 +28,7 @@ function Row(props: RowProps) {
             const render = columnItem.render(text, dataSourceItem, index)
             result = render
           } else {
-            result = String(text)
+            result = !isNil(text) ? String(text) : cellEmptyText
           }
 
           return (
