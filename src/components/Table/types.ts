@@ -70,7 +70,7 @@ export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
   distance?: number
   showLoad?: boolean
   fixedLoad?: boolean
-  emptyText?: string | ReactNode
+  emptyText?: string
 }
 
 export type RowProps<T = unknown> = {

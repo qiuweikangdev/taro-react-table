@@ -1,16 +1,7 @@
-import {
-  forwardRef,
-  ForwardRefRenderFunction,
-  memo,
-  RefObject,
-  useImperativeHandle,
-  useRef,
-} from 'react'
+import { memo } from 'react'
 import { View, Text } from '@tarojs/components'
-import { TaroElement } from '@tarojs/runtime'
 import classNames from 'classnames'
 import Loading from '../Loading'
-import { useUniqueId } from '../../hooks'
 import './index.less'
 
 export type LoadMoreProps = {
@@ -18,30 +9,11 @@ export type LoadMoreProps = {
   loadingText?: string
   noMoreText?: string
   size: Number
-  fixedLoad?: boolean
-  left?: number
 }
 
-export type LoadMoreHandle = {
-  loadMoreRef: RefObject<TaroElement>
-}
-
-const LoadMore: ForwardRefRenderFunction<LoadMoreHandle, LoadMoreProps> = (
-  { status, loadingText, noMoreText, size, fixedLoad = true, left },
-  ref,
-) => {
-  const loadMoreRef = useRef<TaroElement>(null)
-  const genId = useUniqueId()
-
-  useImperativeHandle(ref, () => ({ loadMoreRef }))
-
+function LoadMore({ status, loadingText, noMoreText, size }) {
   return (
-    <View
-      className={classNames('load-more', { ['load-more-sticky']: fixedLoad })}
-      style={{ left: `${left}px` }}
-      id={genId('load-more')}
-      ref={loadMoreRef}
-    >
+    <View className={classNames('load-more', 'load-more-sticky')}>
       {status === 'loading' && <Loading text={loadingText}></Loading>}
       {status == 'noMore' && size > 0 && (
         <Text className='no-more-text'>{noMoreText || '没有更多了'}</Text>
@@ -50,4 +22,4 @@ const LoadMore: ForwardRefRenderFunction<LoadMoreHandle, LoadMoreProps> = (
   )
 }
 
-export default memo(forwardRef(LoadMore))
+export default memo(LoadMore)

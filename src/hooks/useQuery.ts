@@ -21,15 +21,15 @@ function useQuery(): [SelectorQuery, SelectorMethod] {
   )
 
   const getRefSize = useCallback<getRefSizeType>(
-    (element: TaroElement) => {
+    (element: TaroElement | HTMLElement) => {
       return new Promise((resolve, reject) => {
         if (!element) {
           reject({})
         } else {
           try {
-            let selectorQuery = querySelector('#' + element.id).boundingClientRect(result =>
-              resolve(result || {}),
-            )
+            let selectorQuery = querySelector('#' + element.id).boundingClientRect(result => {
+              resolve(result || {})
+            })
             selectorQuery.exec()
           } catch (e) {
             reject(e)

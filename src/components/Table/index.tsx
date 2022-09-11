@@ -5,19 +5,18 @@ import {
   forwardRef,
   useImperativeHandle,
   ForwardRefRenderFunction,
-  useCallback,
   useEffect,
+  useCallback,
 } from 'react'
 import classNames from 'classnames'
-
+import { nextTick } from '@tarojs/taro'
 import { BaseEventOrig, ScrollView, ScrollViewProps, View } from '@tarojs/components'
-import Taro from '@tarojs/taro'
 import Row from './Row'
 import Title from './Title'
-import Empty, { EmptyHandle } from './Empty'
+import Empty from './Empty'
 
 import Loading from '../Loading'
-import LoadMore, { LoadMoreHandle } from '../LoadMore'
+import LoadMore from '../LoadMore'
 import { useQuery, useUpdateState, useUniqueId, useRendered } from '../../hooks'
 import { ScrollDetail, LoadStatus, DataSource, TableProps, Columns } from './types'
 import './index.less'
@@ -52,7 +51,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     onRow,
     distance = 30,
     showLoad = true,
-    fixedLoad = true, // 是否固定加载更多，不随X轴滚动而滚动
+    fixedLoad = true, // 是否固定加载更多，不随横向滚动而滚动
     emptyText,
     ...props
   },
@@ -60,10 +59,8 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
 ) => {
   const scrollRef = useRef<HTMLElement>(null)
   const loadWrapperRef = useRef<HTMLElement>(null)
-  const loadMoreRef = useRef<LoadMoreHandle>(null)
   const headRef = useRef<HTMLElement>(null)
   const emptyWrapperRef = useRef<HTMLElement>(null)
-  const emptyRef = useRef<EmptyHandle>(null)
   const scrollDetailRef = useRef<ScrollDetail>({
     scrollLeft: 0,
     scrollHeight: 0,
@@ -73,23 +70,12 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const [columns, setColumns] = useUpdateState<Columns[]>(pColumns)
   const [loadStatus] = useUpdateState<LoadStatus>(pLoadStatus)
   const [scrollDistance, setScrollDistance] = useState<number>(0)
-  const [fixedLeft, setFixedLeft] = useState<number>(0)
-  const [firstWidth, setFirstWidth] = useState<number>(0)
 
   const [, { getRefSize }] = useQuery()
   const genId = useUniqueId()
 
-  // first render table load/table empty
-  const getFirstWidth = useCallback(async () => {
-    const dom = loadWrapperRef.current || emptyWrapperRef.current
-    if (!firstWidth && dom) {
-      const { width } = await getRefSize(dom)
-      setFirstWidth(width)
-    }
-  }, [firstWidth, getRefSize])
-
   // scroll load
-  const onScrollToLower = async e => {
+  const onScrollToLower = async (e) => {
     if (scrollRef?.current) {
       const { height: tableHeight } = await getRefSize(scrollRef?.current)
       const { scrollHeight = 0, scrollTop = 0 } = scrollDetailRef.current
@@ -112,12 +98,6 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     if (scrollRef?.current) {
       const { scrollTop, scrollHeight, scrollLeft } = e.detail
       const { height: tableHeight } = await getRefSize(scrollRef?.current)
-      if (showLoad && headRef?.current && loadWrapperRef.current) {
-        onScrollFixed({ scrollLeft, fixedDomRef: loadWrapperRef })
-      }
-      if (!dataSource.length && emptyWrapperRef) {
-        onScrollFixed({ scrollLeft, fixedDomRef: emptyWrapperRef })
-      }
       const diff = scrollHeight - (Math.round(scrollTop) + tableHeight)
       setScrollDistance(diff)
       scrollDetailRef.current = { scrollTop, scrollHeight, scrollLeft }
@@ -125,23 +105,31 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     }
   }
 
-  const onScrollFixed = async ({ scrollLeft, fixedDomRef }) => {
-    if (headRef.current && fixedDomRef) {
-      const totalWidth = firstWidth + scrollLeft
-      const { width: headWidth } = await getRefSize(headRef.current)
-      fixedDomRef.current.style.width = `${totalWidth}px`
-      fixedDomRef.current.style.maxWidth = `${headWidth}px`
-    }
+  // set fixed width
+  const setFixedWidth = ({ width, fixedDom }) => {
+    fixedDom.style.width = `${width}px`
+    fixedDom.style.maxWidth = `${width}px`
   }
+
+  // scroll fixed
+  const onScrollFixed = useCallback(async () => {
+    if (headRef.current) {
+      const { width: headWidth } = await getRefSize(headRef.current)
+      if (headWidth) {
+        if (loadWrapperRef.current && fixedLoad) {
+          setFixedWidth({ width: headWidth, fixedDom: loadWrapperRef.current })
+        }
+        if (emptyWrapperRef.current && !dataSource.length) {
+          setFixedWidth({ width: headWidth, fixedDom: emptyWrapperRef.current })
+        }
+      }
+    }
+  }, [dataSource.length, fixedLoad, getRefSize])
 
   const renderTableEmpty = useRendered(() => {
     return (
-      <View
-        ref={emptyWrapperRef}
-        className='taro-table-empty-wrapper'
-        id={genId('taro-table-empty-wrapper')}
-      >
-        <Empty text={emptyText} left={fixedLeft} ref={emptyRef} />
+      <View ref={emptyWrapperRef} className='taro-table-empty-wrapper'>
+        <Empty text={emptyText} />
       </View>
     )
   })
@@ -219,65 +207,34 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   })
 
   const renderTableLoad = useRendered(() => {
+    const isShowLoad = showLoad && (dataSource.length || loadStatus)
     return (
-      showLoad && (
+      isShowLoad && (
         <View
           ref={loadWrapperRef}
-          className='taro-table-load-wrapper'
-          id={genId('taro-table-load-wrapper')}
+          className={classNames('taro-table-load-wrapper', {
+            ['taro-table-load-wrapper-center']: !fixedLoad,
+          })}
         >
           <LoadMore
             status={loadStatus}
             size={dataSource.length}
             noMoreText={noMoreText}
             loadingText={loadLoadingText}
-            fixedLoad={fixedLoad}
-            left={fixedLeft}
-            ref={loadMoreRef}
           ></LoadMore>
         </View>
       )
     )
   })
 
-  // fixed table load
-  const stickyTableLoad = useCallback(async () => {
-    if (fixedLoad && showLoad && loadStatus) {
-      if (loadWrapperRef.current && loadMoreRef.current?.loadMoreRef.current) {
-        const { width: loadWidth } = await getRefSize(loadMoreRef.current.loadMoreRef.current)
-        if (firstWidth && loadWidth) {
-          const left = Math.round(firstWidth / 2) - Math.round(loadWidth / 2)
-          setFixedLeft(left)
-        }
-      }
-    }
-  }, [fixedLoad, showLoad, getRefSize, loadStatus, firstWidth])
-
-  // fixed table empty
-  const stickyTableEmpty = useCallback(async () => {
-    if (!dataSource.length && emptyRef.current?.emptyRef.current) {
-      const { width: emptyWidth } = await getRefSize(emptyRef.current?.emptyRef.current)
-      if (firstWidth && emptyWidth) {
-        const left = Math.round(firstWidth / 2) - Math.round(emptyWidth / 2)
-        setFixedLeft(left)
-      }
-    }
-  }, [dataSource.length, firstWidth, getRefSize])
-
-  // fixed
+  // fixed load/ fixed empty
   useEffect(() => {
-    Taro.nextTick(() => {
-      stickyTableLoad()
-      stickyTableEmpty()
+    nextTick(() => {
+      if (columns.length || !dataSource.length) {
+        onScrollFixed()
+      }
     })
-  }, [stickyTableEmpty, stickyTableLoad])
-
-  // re-render firstWidth
-  useEffect(() => {
-    if (!dataSource.length || loadStatus || (fixedLoad && showLoad)) {
-      getFirstWidth()
-    }
-  }, [dataSource.length, fixedLoad, getFirstWidth, loadStatus, showLoad])
+  }, [columns, dataSource, onScrollFixed])
 
   useImperativeHandle(ref, () => ({ scrollRef, scrollDistance }))
 
