@@ -14,7 +14,6 @@ import { BaseEventOrig, ScrollView, ScrollViewProps, View } from '@tarojs/compon
 import Row from './Row'
 import Title from './Title'
 import Empty from './Empty'
-
 import Loading from '../Loading'
 import LoadMore from '../LoadMore'
 import { useQuery, useUpdateState, useUniqueId, useRendered } from '../../hooks'
@@ -72,8 +71,6 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const [columns, setColumns] = useUpdateState<Columns[]>(pColumns)
   const [loadStatus] = useUpdateState<LoadStatus>(pLoadStatus)
   const [scrollDistance, setScrollDistance] = useState<number>(0)
-  const [isReady, setIsReady] = useState(false)
-
   const [, { getRefSize }] = useQuery()
   const genId = useUniqueId()
 

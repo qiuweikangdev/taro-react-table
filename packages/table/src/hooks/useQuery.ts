@@ -27,7 +27,7 @@ function useQuery(): [SelectorQuery, SelectorMethod] {
           reject({})
         } else {
           try {
-            let selectorQuery = querySelector('#' + element.id).boundingClientRect(result => {
+            const selectorQuery = querySelector('#' + element.id).boundingClientRect((result) => {
               resolve(result || {})
             })
             selectorQuery.exec()
