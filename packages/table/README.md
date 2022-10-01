@@ -7,8 +7,7 @@
 - 开箱即用，快速开发图表，满足在移动端各种可视化需求
 
 - 支持自定义构建echarts
-
-![](https://raw.githubusercontent.com/qiuweikangdev/taro-react-table/master/images/demo.png)
+![](https://raw.githubusercontent.com/qiuweikangdev/taro-react-table/master/images/demo.gif)
 
 # 安装
 
