@@ -1,5 +1,5 @@
 import { CommonEventFunction, ScrollViewProps } from '@tarojs/components'
-import { CSSProperties } from 'react'
+import { CSSProperties, ReactNode } from 'react'
 
 export type ScrollDetail = {
   scrollLeft: number
@@ -72,6 +72,7 @@ export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
   fixedLoad?: boolean
   emptyText?: string
   cellEmptyText?: string
+  renderEmpty?: ReactNode
 }
 
 export type RowProps<T = unknown> = {
@@ -107,4 +108,5 @@ export type TitleProps<T = unknown> = {
 export type EmptyProps = {
   text?: string
   fixedEmpty?: boolean
+  renderEmpty?: ReactNode
 }

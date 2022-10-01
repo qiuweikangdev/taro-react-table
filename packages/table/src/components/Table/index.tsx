@@ -5,8 +5,8 @@ import {
   forwardRef,
   useImperativeHandle,
   ForwardRefRenderFunction,
-  useEffect,
   useCallback,
+  useEffect,
 } from 'react'
 import classNames from 'classnames'
 import { nextTick } from '@tarojs/taro'
@@ -54,6 +54,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     fixedLoad = true, // 是否固定加载更多，不随横向滚动而滚动
     emptyText,
     cellEmptyText,
+    renderEmpty,
     ...props
   },
   ref,
@@ -71,6 +72,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const [columns, setColumns] = useUpdateState<Columns[]>(pColumns)
   const [loadStatus] = useUpdateState<LoadStatus>(pLoadStatus)
   const [scrollDistance, setScrollDistance] = useState<number>(0)
+  const [isReady, setIsReady] = useState(false)
 
   const [, { getRefSize }] = useQuery()
   const genId = useUniqueId()
@@ -98,7 +100,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const onScroll = async (e: BaseEventOrig<ScrollViewProps.onScrollDetail>) => {
     if (scrollRef?.current) {
       const { scrollTop, scrollHeight, scrollLeft } = e.detail
-      const { height: tableHeight } = await getRefSize(scrollRef?.current)
+      const { height: tableHeight } = await getRefSize(scrollRef.current)
       const diff = scrollHeight - (Math.round(scrollTop) + tableHeight)
       setScrollDistance(diff)
       scrollDetailRef.current = { scrollTop, scrollHeight, scrollLeft }
@@ -130,7 +132,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const renderTableEmpty = useRendered(() => {
     return (
       <View ref={emptyWrapperRef} className='taro-table-empty-wrapper'>
-        <Empty text={emptyText} />
+        <Empty text={emptyText} renderEmpty={renderEmpty} />
       </View>
     )
   })
@@ -161,8 +163,8 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
                     colWidth={colWidth}
                     setDataSource={setDataSource}
                     dataSource={dataSource}
-                    titleStyle={titleStyle}
                     titleClassName={titleClassName}
+                    titleStyle={titleStyle}
                   />
                 )
               })}
@@ -227,14 +229,13 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     )
   })
 
-  // fixed load/ fixed empty
   useEffect(() => {
-    nextTick(() => {
-      if (columns.length || !dataSource.length) {
+    if (columns.length || !dataSource.length) {
+      nextTick(() => {
         onScrollFixed()
-      }
-    })
-  }, [columns, dataSource, onScrollFixed])
+      })
+    }
+  }, [columns.length, dataSource.length, onScrollFixed])
 
   useImperativeHandle(ref, () => ({ scrollRef, scrollDistance }))
 
