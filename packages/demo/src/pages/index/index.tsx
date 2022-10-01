@@ -50,22 +50,22 @@ export default function Demo() {
 
   const columns: Columns[] = [
     {
-      title: '陈奕迅1',
+      title: 'Song1',
       dataIndex: 'name1',
       sorter: true,
       fixed: 'left',
       sortOrder: sortInfo.field == 'name1' && sortInfo.order,
     },
     {
-      title: '陈奕迅2',
+      title: 'Song2',
       dataIndex: 'name2',
     },
     {
-      title: '陈奕迅3',
+      title: 'Song3',
       dataIndex: 'name3',
     },
     {
-      title: '陈奕迅4',
+      title: 'Song4',
       dataIndex: 'name4',
     },
   ]
