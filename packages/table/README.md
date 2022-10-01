@@ -71,6 +71,7 @@ import 'taro-react-table/dist/index.css'
 | `fixedLoad`       | 是否固定加载更多，不随X轴滚动而滚动                          | boolean                            | 否   | true       |
 | `emptyText`       | 空数据显示文本                                               | string \| ReactNode                | 否   | 暂无数据   |
 | `cellEmptyText`   | 单元格空数据显示文本                                         | string                             | 否   | -          |
+| `renderEmpty`     | 自定义渲染空数据                                             | ReactNode                          | 否   |            |
 
 
 
