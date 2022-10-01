@@ -1,6 +1,6 @@
 {
   "name": "taro-react-table",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "taro表格",
   "scripts": {
     "build:table": "rimraf dist && rollup --config ./rollup.config.js",
@@ -17,8 +17,8 @@
   ],
   "author": "qiuweikang",
   "license": "MIT",
-  "main": "src/index.ts",
-  "module": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
   "css": "dist/index.css",
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
