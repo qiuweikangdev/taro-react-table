@@ -1,0 +1,4 @@
+packages/**/*.md
+scripts/**/*.js
+scripts
+commitlint.config.js
