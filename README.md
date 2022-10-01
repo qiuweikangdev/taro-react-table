@@ -232,3 +232,9 @@ export default function Demo() {
 }
 
 ```
+
+# 友情推荐
+
+| 项目                                                         | 描述                                         |
+| ------------------------------------------------------------ | -------------------------------------------- |
+| [taro-react-echarts](https://github.com/qiuweikangdev/taro-react-echarts) | 基于Taro3、React的H5和微信小程序多端图表组件 |
