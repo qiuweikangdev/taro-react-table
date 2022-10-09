@@ -232,7 +232,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
         onScrollFixed()
       })
     }
-  }, [columns.length, dataSource.length, onScrollFixed])
+  }, [columns, dataSource, onScrollFixed])
 
   useImperativeHandle(ref, () => ({ scrollRef, scrollDistance }))
 
