@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.1](https://github.com/qiuweikangdev/taro-react-table/compare/taro-react-table-v1.5.0...taro-react-table-v1.5.1) (2022-10-09)
+
+
+### Bug Fixes
+
+* determine whether the tag exists ([e8e68f1](https://github.com/qiuweikangdev/taro-react-table/commit/e8e68f11641afce532bbdaafa5f1a1b7d2cdb420))
+* **table:** scroll fixed ([2035b9e](https://github.com/qiuweikangdev/taro-react-table/commit/2035b9ef97030f81bfcdc562fcb9c8fad1264dbd))
+
+
+###   Features
+
+* release.js generate version/tags ([e202bb1](https://github.com/qiuweikangdev/taro-react-table/commit/e202bb18daedb920e79f297a62b4c935df0e26c8))
+
 ## [1.5.0](https://github.com/qiuweikangdev/taro-react-table/compare/taro-react-table-v1.4.0...taro-react-table-v1.5.0) (2022-10-01)
 
 
