@@ -8,13 +8,19 @@ program.option('-r, --release <version>', 'package version')
 program.parse()
 
 const { release } = program.opts()
+const tag = `${pkg.name}-v${release}`
 try {
   if (release) {
-    execSync(
-      `cd packages/table && standard-version -r ${release} -t ${pkg.name}-v --infile ../../CHANGELOG.md`,
-    )
-    execSync(`git push origin ${pkg.name}-v${release}`)
-    execSync(`git push origin HEAD`)
+    const value = execSync(`git tag -l ${tag}`).toString('utf8')
+    if (!value) {
+      execSync(
+        `cd packages/table && standard-version -r ${release} -t ${pkg.name}-v --infile ../../CHANGELOG.md`,
+      )
+      execSync(`git push origin ${tag}`)
+      execSync(`git push origin HEAD`)
+    } else {
+      throw `${tag} already exists`
+    }
   } else {
     throw 'release does not exist'
   }
