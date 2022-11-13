@@ -17,12 +17,29 @@ function Row(props: RowProps) {
     colWidth = 0,
     cellEmptyText = '-',
     onRow,
+    widthMap = {},
+    ellipsis = false,
+    striped = false,
   } = props
+
   return (
-    <View className={classNames(['taro-table-row', rowClassName])} style={rowStyle}>
+    <View
+      className={classNames([
+        'taro-table-row',
+        rowClassName,
+        {
+          ['taro-table-row-striped']: striped,
+        },
+      ])}
+      style={rowStyle}
+    >
       {columns.map((columnItem: Columns, colIndex: number): JSX.Element => {
         const text = dataSourceItem[columnItem.dataIndex]
+        let width: string | number = widthMap[colIndex]
         let result
+        if (columnItem.width) {
+          width = getSize(columnItem.width)
+        }
         if (columnItem.render) {
           const render = columnItem.render(text, dataSourceItem, index)
           result = render
@@ -39,7 +56,7 @@ function Row(props: RowProps) {
             })}
             style={{
               textAlign: columnItem.align || 'center',
-              width: getSize(columnItem.width || colWidth),
+              width,
               [columnItem.fixed as string]:
                 columnItem.fixed &&
                 calculateFixedDistance({
@@ -53,7 +70,9 @@ function Row(props: RowProps) {
             onClick={() => onRow?.(dataSourceItem, index)}
           >
             <Text
-              className='taro-table-col-text'
+              className={classNames('taro-table-col-text', {
+                'taro-table-col-text-ellipsis': ellipsis,
+              })}
               onClick={() => columnItem?.onCell?.(dataSourceItem, index)}
             >
               {result}

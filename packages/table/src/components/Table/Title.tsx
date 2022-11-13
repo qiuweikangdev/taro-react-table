@@ -1,9 +1,11 @@
-import { memo } from 'react'
+import { memo, useRef, useEffect } from 'react'
 import classNames from 'classnames'
-import { View, Text } from '@tarojs/components'
+import { View, Text, TextProps } from '@tarojs/components'
 import { calculateFixedDistance, getSize } from '../../utils'
 import { Columns, SortOrder, TitleProps } from './types'
+import { useQuery, useUniqueId } from '../../hooks'
 import './index.less'
+import { TaroElement } from '@tarojs/runtime'
 
 function Title(props: TitleProps) {
   const {
@@ -18,15 +20,20 @@ function Title(props: TitleProps) {
     setDataSource,
     dataSource = [],
     onSorter,
+    onTitleWidth,
   } = props
+
+  const [, { getRefSize }] = useQuery()
+  const genId = useUniqueId()
+  const titleRef = useRef<TaroElement | HTMLElement>(null)
 
   const handleClickTitle = (col: Columns, colIndex: number) => {
     const sorter = col.sorter
     if (sorter) {
       const tempColumns = [...columns]
-      tempColumns.forEach((j: Columns, i: number): void => {
-        if (i !== colIndex) {
-          delete j.sortOrder
+      tempColumns.forEach((item: Columns, index: number): void => {
+        if (index !== colIndex) {
+          delete item.sortOrder
         }
       })
       /**
@@ -52,6 +59,17 @@ function Title(props: TitleProps) {
     }
   }
 
+  useEffect(() => {
+    getTitleSize()
+  }, [column])
+
+  const getTitleSize = async () => {
+    if (titleRef.current) {
+      const { width } = await getRefSize(titleRef.current)
+      onTitleWidth?.({ index, width })
+    }
+  }
+
   return (
     <View
       onClick={() => handleClickTitle(column, index)}
@@ -68,31 +86,36 @@ function Title(props: TitleProps) {
             columns,
             colWidth,
           }),
-        width: getSize(column.width || colWidth),
         ...column.titleStyle,
         ...titleStyle,
       }}
       key={column.key || column.dataIndex}
     >
-      <Text className='taro-table-title-text'>{column.title}</Text>
-      {column.sorter && (
-        <View className='taro-table-title-sort-wrwapper'>
-          <View
-            className={classNames({
-              ['title-sort-btn']: true,
-              ['title-ascend']: true,
-              ['title-ascend-active']: column.sortOrder === 'ascend',
-            })}
-          />
-          <View
-            className={classNames({
-              ['title-sort-btn']: true,
-              ['title-descend']: true,
-              ['title-descend-active']: column.sortOrder === 'descend',
-            })}
-          />
-        </View>
-      )}
+      <View
+        id={genId('taro-table-title-text-wrapper')}
+        ref={titleRef}
+        className='taro-table-title-text-wrapper'
+      >
+        <Text className='taro-table-title-text'>{column.title}</Text>
+        {column.sorter && (
+          <View className='taro-table-title-sort-wrwapper'>
+            <View
+              className={classNames({
+                ['title-sort-btn']: true,
+                ['title-ascend']: true,
+                ['title-ascend-active']: column.sortOrder === 'ascend',
+              })}
+            />
+            <View
+              className={classNames({
+                ['title-sort-btn']: true,
+                ['title-descend']: true,
+                ['title-descend-active']: column.sortOrder === 'descend',
+              })}
+            />
+          </View>
+        )}
+      </View>
     </View>
   )
 }

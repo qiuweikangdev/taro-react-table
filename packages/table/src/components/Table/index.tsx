@@ -17,7 +17,7 @@ import Empty from './Empty'
 import Loading from '../Loading'
 import LoadMore from '../LoadMore'
 import { useQuery, useUpdateState, useUniqueId, useRendered } from '../../hooks'
-import { ScrollDetail, LoadStatus, DataSource, TableProps, Columns } from './types'
+import { ScrollDetail, LoadStatus, DataSource, TableProps, Columns, TitleProps } from './types'
 import './index.less'
 
 const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
@@ -54,6 +54,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     emptyText,
     cellEmptyText,
     renderEmpty,
+    striped = false,
     ...props
   },
   ref,
@@ -67,6 +68,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     scrollHeight: 0,
     scrollTop: 0,
   })
+  const [titleWidthMap, setTitleWidthMap] = useState({})
   const [dataSource, setDataSource] = useUpdateState<unknown[]>(pDataSource)
   const [columns, setColumns] = useUpdateState<Columns[]>(pColumns)
   const [loadStatus] = useUpdateState<LoadStatus>(pLoadStatus)
@@ -134,6 +136,10 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     )
   })
 
+  const onTitleWidth = ({ index, width }: Record<'index' | 'width', number>) => {
+    setTitleWidthMap((state) => ({ ...state, [index]: width }))
+  }
+
   const renderTableHead = useRendered(() => {
     return (
       showHeader &&
@@ -162,6 +168,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
                     dataSource={dataSource}
                     titleClassName={titleClassName}
                     titleStyle={titleStyle}
+                    onTitleWidth={onTitleWidth}
                   />
                 )
               })}
@@ -194,9 +201,11 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
                   key={key}
                   dataSourceItem={item}
                   index={index}
+                  widthMap={titleWidthMap}
                   colWidth={colWidth}
                   onRow={onRow}
                   cellEmptyText={cellEmptyText}
+                  striped={striped}
                 />
               )
             })

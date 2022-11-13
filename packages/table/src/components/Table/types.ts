@@ -40,6 +40,7 @@ export type Columns<T = unknown> = {
   sorter?: boolean | CompareFn<T>
   sortOrder?: SortOrder
   onCell?: (record: T, rowIndex: number) => void
+  ellipsis?: boolean
 }
 
 export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
@@ -73,6 +74,7 @@ export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
   emptyText?: string
   cellEmptyText?: string
   renderEmpty?: ReactNode
+  striped?: boolean
 }
 
 export type RowProps<T = unknown> = {
@@ -88,6 +90,9 @@ export type RowProps<T = unknown> = {
   colWidth?: number
   onRow?: (record: T, index: number) => void
   cellEmptyText?: string
+  widthMap?: Record<number, number>
+  ellipsis?: boolean
+  striped?: boolean
 }
 
 export type TitleProps<T = unknown> = {
@@ -103,6 +108,7 @@ export type TitleProps<T = unknown> = {
   onSorter?: ({ column, field, order }: SorterEvent) => void
   unsort?: boolean
   colWidth?: number
+  onTitleWidth?: ({ index, width }: Record<'index' | 'width', number>) => void
 }
 
 export type EmptyProps = {
