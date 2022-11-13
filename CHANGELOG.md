@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/qiuweikangdev/taro-react-table/compare/taro-react-table-v1.5.1...taro-react-table-v1.6.0) (2022-11-13)
+
+
+###   Features
+
+* **table:** column adaptive width、striped [#2](https://github.com/qiuweikangdev/taro-react-table/issues/2) ([3e3790a](https://github.com/qiuweikangdev/taro-react-table/commit/3e3790a6ad6cb83f546dcf1af71401c24463259d))
+
 ### [1.5.1](https://github.com/qiuweikangdev/taro-react-table/compare/taro-react-table-v1.5.0...taro-react-table-v1.5.1) (2022-10-09)
 
 
