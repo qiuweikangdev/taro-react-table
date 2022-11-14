@@ -18,7 +18,6 @@ function Row(props: RowProps) {
     cellEmptyText = '-',
     onRow,
     widthMap = {},
-    ellipsis = false,
     striped = false,
   } = props
 
@@ -71,7 +70,7 @@ function Row(props: RowProps) {
           >
             <Text
               className={classNames('taro-table-col-text', {
-                'taro-table-col-text-ellipsis': ellipsis,
+                'taro-table-col-text-ellipsis': columnItem.ellipsis,
               })}
               onClick={() => columnItem?.onCell?.(dataSourceItem, index)}
             >

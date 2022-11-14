@@ -17,7 +17,7 @@ import Empty from './Empty'
 import Loading from '../Loading'
 import LoadMore from '../LoadMore'
 import { useQuery, useUpdateState, useUniqueId, useRendered } from '../../hooks'
-import { ScrollDetail, LoadStatus, DataSource, TableProps, Columns, TitleProps } from './types'
+import { ScrollDetail, LoadStatus, DataSource, TableProps, Columns } from './types'
 import './index.less'
 
 const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (

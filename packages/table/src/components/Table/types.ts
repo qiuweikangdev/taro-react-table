@@ -91,7 +91,6 @@ export type RowProps<T = unknown> = {
   onRow?: (record: T, index: number) => void
   cellEmptyText?: string
   widthMap?: Record<number, number>
-  ellipsis?: boolean
   striped?: boolean
 }
 

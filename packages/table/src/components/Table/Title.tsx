@@ -1,6 +1,6 @@
 import { memo, useRef, useEffect } from 'react'
 import classNames from 'classnames'
-import { View, Text, TextProps } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
 import { calculateFixedDistance, getSize } from '../../utils'
 import { Columns, SortOrder, TitleProps } from './types'
 import { useQuery, useUniqueId } from '../../hooks'
@@ -88,6 +88,7 @@ function Title(props: TitleProps) {
           }),
         ...column.titleStyle,
         ...titleStyle,
+        width: column.width && getSize(column.width),
       }}
       key={column.key || column.dataIndex}
     >
