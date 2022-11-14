@@ -72,6 +72,7 @@ import 'taro-react-table/dist/index.css'
 | `emptyText`       | 空数据显示文本                                               | string \| ReactNode                | 否   | 暂无数据   |
 | `cellEmptyText`   | 单元格空数据显示文本                                         | string                             | 否   | -          |
 | `renderEmpty`     | 自定义渲染空数据                                             | ReactNode                          | 否   |            |
+| `striped`         | 是否显示斑马纹                                               | boolean                            | 否   | false      |
 
 
 
@@ -102,6 +103,7 @@ import 'taro-react-table/dist/index.css'
 | `sorter`    | 排序函数，本地排序使用一个函数(参考 [Array.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) 的 compareFunction)，需要服务端排序可设为 true | CompareFn                          | 否          |        |
 | `sortOrder` | 排序的受控属性，外界可用此控制列的排序，可设置为 `ascend` `descend` false | boolean \| string                  |             |        |
 | `onCell`    | 单元格点击事件                                               | function(record, index)            | 否          |        |
+| `ellipsis`  | 超过宽度将自动省略                                           | boolean                            | 否          | false  |
 
 
 
@@ -160,22 +162,22 @@ export default function Demo() {
 
   const columns: Columns[] = [
     {
-      title: '陈奕迅1',
+      title: 'Song1',
       dataIndex: 'name1',
       sorter: true,
       fixed: 'left',
       sortOrder: sortInfo.field == 'name1' && sortInfo.order,
     },
     {
-      title: '陈奕迅2',
+      title: 'Song2',
       dataIndex: 'name2',
     },
     {
-      title: '陈奕迅3',
+      title: 'Song3',
       dataIndex: 'name3',
     },
     {
-      title: '陈奕迅4',
+      title: 'Song4',
       dataIndex: 'name4',
     },
   ]
@@ -198,7 +200,7 @@ export default function Demo() {
     })
   }
 
-  const onLoad = async e => {
+  const onLoad = async (e) => {
     setLoadStatus('loading')
     const list = await getList()
     setDataSource(list)
@@ -209,7 +211,7 @@ export default function Demo() {
   const onSorter = ({ column, field, order }: SorterEvent) => {
     console.log(column, field, order)
     // 模拟排序加载效果
-    setLoading(state => !state)
+    setLoading((state) => !state)
     setSortInfo({ order, field })
     const tempList = [...dataSource]
     setTimeout(() => {
@@ -228,7 +230,7 @@ export default function Demo() {
       onLoad={onLoad}
       loadStatus={loadStatus}
       onSorter={onSorter}
-    ></Table>
+    />
   )
 }
 
