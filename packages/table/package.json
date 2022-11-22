@@ -1,6 +1,6 @@
 {
   "name": "taro-react-table",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "taro表格",
   "scripts": {
     "build:table": "rimraf dist && rollup --config ./rollup.config.js",

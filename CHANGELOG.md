@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.2](https://github.com/qiuweikangdev/taro-react-table/compare/taro-react-table-v1.6.1...taro-react-table-v1.6.2) (2022-11-22)
+
 ### [1.6.1](https://github.com/qiuweikangdev/taro-react-table/compare/taro-react-table-v1.6.0...taro-react-table-v1.6.1) (2022-11-14)
 
 
