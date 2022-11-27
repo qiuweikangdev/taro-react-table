@@ -20,7 +20,7 @@ import LoadMore from '../LoadMore'
 import { useQuery, useUpdateState, useUniqueId, useRendered } from '../../hooks'
 import { ScrollDetail, LoadStatus, DataSource, TableProps, Columns, TitleRectType } from './types'
 import { TableContext } from '../../utils/context'
-import { pickValid } from '../../utils'
+import { getSize, pickValid } from '../../utils'
 import { ElementRectType } from '../../hooks/useQuery'
 import './index.less'
 
@@ -123,8 +123,8 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
 
   // set fixed width
   const setFixedWidth = ({ width, fixedDom }) => {
-    fixedDom.style.width = `${width}px`
-    fixedDom.style.maxWidth = `${width}px`
+    fixedDom.style.width = getSize(width)
+    fixedDom.style.maxWidth = getSize(width)
   }
 
   // scroll fixed
