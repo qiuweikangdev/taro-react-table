@@ -115,43 +115,55 @@ import 'taro-react-table/dist/index.css'
 import Table,{ Columns, LoadStatus, SorterEvent } from 'taro-react-table'
 
 export default function Demo() {
-  const [loading, setLoading] = useState(false)
-  const [dataSource, setDataSource] = useState([
+ const [loading, setLoading] = useState(false)
+ const [dataSource, setDataSource] = useState([
     {
       name1: '无人之境1',
       name2: '打回原形1',
       name3: '防不胜防1',
       name4: '十面埋伏1',
+      name5: 'k歌之王1',
+      name6: '岁月如歌1',
     },
     {
       name1: '无人之境2',
       name2: '打回原形2',
       name3: '防不胜防2',
       name4: '十面埋伏2',
+      name5: 'k歌之王2',
+      name6: '岁月如歌2',
     },
     {
       name1: '无人之境3',
       name2: '打回原形3',
       name3: '防不胜防3',
       name4: '十面埋伏3',
+      name5: 'k歌之王3',
+      name6: '岁月如歌3',
     },
     {
       name1: '无人之境4',
       name2: '打回原形4',
       name3: '防不胜防4',
       name4: '十面埋伏4',
+      name5: 'k歌之王4',
+      name6: '岁月如歌4',
     },
     {
       name1: '无人之境5',
       name2: '打回原形5',
       name3: '防不胜防5',
       name4: '十面埋伏5',
+      name5: 'k歌之王5',
+      name6: '岁月如歌5',
     },
     {
       name1: '无人之境6',
       name2: '打回原形6',
       name3: '防不胜防6',
       name4: '十面埋伏6',
+      name5: 'k歌之王6',
+      name6: '岁月如歌6',
     },
   ])
   const [loadStatus, setLoadStatus] = useState<LoadStatus>(null)
@@ -160,25 +172,35 @@ export default function Demo() {
     order: 'ascend',
   })
 
-  const columns: Columns[] = [
+   const columns: Columns[] = [
     {
-      title: '陈奕迅1',
+      title: 'Song1',
       dataIndex: 'name1',
       sorter: true,
       fixed: 'left',
+      width: 100,
       sortOrder: sortInfo.field == 'name1' && sortInfo.order,
     },
     {
-      title: '陈奕迅2',
+      title: 'Song2',
+      width: 100,
       dataIndex: 'name2',
     },
     {
-      title: '陈奕迅3',
+      title: 'Song3',
       dataIndex: 'name3',
     },
     {
-      title: '陈奕迅4',
+      title: 'Song4',
       dataIndex: 'name4',
+    },
+    {
+      title: 'Song5',
+      dataIndex: 'name5',
+    },
+    {
+      title: 'Song6',
+      dataIndex: 'name6',
     },
   ]
 
@@ -193,6 +215,8 @@ export default function Demo() {
             name2: `打回原形${size}`,
             name3: `防不胜防${size}`,
             name4: `十面埋伏${size}`,
+            name5: `k歌之王${size}`,
+            name6: `岁月如歌${size}`,
           })
         }
         resolve(list)
