@@ -41,38 +41,39 @@ import 'taro-react-table/dist/index.css'
 
 ## Table
 
-| 参数              | 描述                                                         | 类型                               | 必传 | 默认值     |
-| ----------------- | ------------------------------------------------------------ | ---------------------------------- | ---- | ---------- |
-| 本身参数          | 参考[ScrollView](https://taro-docs.jd.com/taro/docs/components/viewContainer/scroll-view) |                                    |      |            |
-| `dataSource`      | 数据源                                                       | object[]                           | 是   | `[]`       |
-| `columns`         | 表格列的配置描述，具体项见下表                               | Columns[]                          | 是   | `[]`       |
-| `rowKey`          | 表格行 key 的取值，可以是字符串或一个函数                    | string \| function(record): string | 是   | `key`      |
-| `wrapperClass`    | 外层容器的类名                                               | string                             | 否   |            |
-| `wrapperStyle`    | 外层容器的样式                                               | object                             | 否   |            |
-| `className`       | ScrollView容器类名                                           | string                             | 否   |            |
-| `style`           | ScrollView容器样式                                           | object                             | 否   |            |
-| `rowClassName`    | 行类名                                                       | string                             | 否   |            |
-| `rowStyle`        | 行样式                                                       | object                             | 否   |            |
-| `colClassName`    | 单元格类名                                                   | string                             | 否   |            |
-| `colStyle`        | 单元格样式                                                   | object                             | 否   |            |
-| `titleStyle`      | 标题样式                                                     | object                             | 否   |            |
-| `titleClassName`  | 标题类名                                                     | string                             | 否   |            |
-| `titleClassName`  | 标题类名                                                     | string                             | 否   |            |
-| `loading`         | 是否显示加载                                                 | boolean                            | 否   |            |
-| `loadingText`     | 加载文本                                                     | string                             | 否   | ''         |
-| `loadStatus`      | 加载状态                                                     | loading \| noMore \| null          | 否   | null       |
-| `colWidth`        | 列宽度                                                       | *number*                           | 否   | 120        |
-| `unsort`          | 设置是否取消排序 (一般需求不需要取消排序，设置true可开启取消排序) | boolean                            | 否   | false      |
-| `showHeader`      | 是否显示表头                                                 | boolean                            | 否   | true       |
-| `noMoreText`      | loadStatus为noMore 状态显示文案                              | string                             | 否   | 没有更多了 |
-| `loadLoadingText` | loadStatus为loading 状态显示文案                             | string                             | 否   | 加载中...  |
-| `distance`        | 小于视窗距离多少开始触发onLoad                               | number                             | 否   | 30         |
-| `showLoad`        | 是否显示load加载状态，为false时不触发onLoad事件              | boolean                            | 否   | true       |
-| `fixedLoad`       | 是否固定加载更多，不随X轴滚动而滚动                          | boolean                            | 否   | true       |
-| `emptyText`       | 空数据显示文本                                               | string \| ReactNode                | 否   | 暂无数据   |
-| `cellEmptyText`   | 单元格空数据显示文本                                         | string                             | 否   | -          |
-| `renderEmpty`     | 自定义渲染空数据                                             | ReactNode                          | 否   |            |
-| `striped`         | 是否显示斑马纹                                               | boolean                            | 否   | false      |
+| 参数              | 描述                                                         | 类型                                     | 必传 | 默认值     |
+| ----------------- | ------------------------------------------------------------ | ---------------------------------------- | ---- | ---------- |
+| 本身参数          | 参考[ScrollView](https://taro-docs.jd.com/taro/docs/components/viewContainer/scroll-view) |                                          |      |            |
+| `dataSource`      | 数据源                                                       | object[]                                 | 是   | `[]`       |
+| `columns`         | 表格列的配置描述，具体项见下表                               | Columns[]                                | 是   | `[]`       |
+| `rowKey`          | 表格行 key 的取值，可以是字符串或一个函数                    | string \| function(record): string       | 是   | `key`      |
+| `wrapperClass`    | 外层容器的类名                                               | string                                   | 否   |            |
+| `wrapperStyle`    | 外层容器的样式                                               | object                                   | 否   |            |
+| `className`       | ScrollView容器类名                                           | string                                   | 否   |            |
+| `style`           | ScrollView容器样式                                           | object                                   | 否   |            |
+| `rowClassName`    | 行类名                                                       | string                                   | 否   |            |
+| `rowStyle`        | 行样式                                                       | object                                   | 否   |            |
+| `colClassName`    | 单元格类名                                                   | string                                   | 否   |            |
+| `colStyle`        | 单元格样式                                                   | object                                   | 否   |            |
+| `titleStyle`      | 标题样式                                                     | object                                   | 否   |            |
+| `titleClassName`  | 标题类名                                                     | string                                   | 否   |            |
+| `titleClassName`  | 标题类名                                                     | string                                   | 否   |            |
+| `loading`         | 是否显示加载                                                 | boolean                                  | 否   |            |
+| `loadingText`     | 加载文本                                                     | string                                   | 否   | ''         |
+| `loadStatus`      | 加载状态                                                     | loading \| noMore \| null                | 否   | null       |
+| `unsort`          | 设置是否取消排序 (一般需求不需要取消排序，设置true可开启取消排序) | boolean                                  | 否   | false      |
+| `showHeader`      | 是否显示表头                                                 | boolean                                  | 否   | true       |
+| `noMoreText`      | loadStatus为noMore 状态显示文案                              | string                                   | 否   | 没有更多了 |
+| `loadLoadingText` | loadStatus为loading 状态显示文案                             | string                                   | 否   | 加载中...  |
+| `distance`        | 小于视窗距离多少开始触发onLoad                               | number                                   | 否   | 30         |
+| `showLoad`        | 是否显示load加载状态，为false时不触发onLoad事件              | boolean                                  | 否   | true       |
+| `fixedLoad`       | 是否固定加载更多，不随X轴滚动而滚动                          | boolean                                  | 否   | true       |
+| `emptyText`       | 空数据显示文本                                               | string \| ReactNode                      | 否   | 暂无数据   |
+| `cellEmptyText`   | 单元格空数据显示文本                                         | string                                   | 否   | -          |
+| `renderEmpty`     | 自定义渲染空数据                                             | ReactNode                                | 否   |            |
+| `size`            | 间距大小                                                     | 'small' \| 'middle' \| 'large' \| number | 否   | middle     |
+
+
 
 
 
@@ -103,7 +104,6 @@ import 'taro-react-table/dist/index.css'
 | `sorter`    | 排序函数，本地排序使用一个函数(参考 [Array.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) 的 compareFunction)，需要服务端排序可设为 true | CompareFn                          | 否          |        |
 | `sortOrder` | 排序的受控属性，外界可用此控制列的排序，可设置为 `ascend` `descend` false | boolean \| string                  |             |        |
 | `onCell`    | 单元格点击事件                                               | function(record, index)            | 否          |        |
-| `ellipsis`  | 超过宽度将自动省略                                           | boolean                            | 否          | false  |
 
 
 
@@ -115,43 +115,55 @@ import 'taro-react-table/dist/index.css'
 import Table,{ Columns, LoadStatus, SorterEvent } from 'taro-react-table'
 
 export default function Demo() {
-  const [loading, setLoading] = useState(false)
-  const [dataSource, setDataSource] = useState([
+ const [loading, setLoading] = useState(false)
+ const [dataSource, setDataSource] = useState([
     {
       name1: '无人之境1',
       name2: '打回原形1',
       name3: '防不胜防1',
       name4: '十面埋伏1',
+      name5: 'k歌之王1',
+      name6: '岁月如歌1',
     },
     {
       name1: '无人之境2',
       name2: '打回原形2',
       name3: '防不胜防2',
       name4: '十面埋伏2',
+      name5: 'k歌之王2',
+      name6: '岁月如歌2',
     },
     {
       name1: '无人之境3',
       name2: '打回原形3',
       name3: '防不胜防3',
       name4: '十面埋伏3',
+      name5: 'k歌之王3',
+      name6: '岁月如歌3',
     },
     {
       name1: '无人之境4',
       name2: '打回原形4',
       name3: '防不胜防4',
       name4: '十面埋伏4',
+      name5: 'k歌之王4',
+      name6: '岁月如歌4',
     },
     {
       name1: '无人之境5',
       name2: '打回原形5',
       name3: '防不胜防5',
       name4: '十面埋伏5',
+      name5: 'k歌之王5',
+      name6: '岁月如歌5',
     },
     {
       name1: '无人之境6',
       name2: '打回原形6',
       name3: '防不胜防6',
       name4: '十面埋伏6',
+      name5: 'k歌之王6',
+      name6: '岁月如歌6',
     },
   ])
   const [loadStatus, setLoadStatus] = useState<LoadStatus>(null)
@@ -160,16 +172,18 @@ export default function Demo() {
     order: 'ascend',
   })
 
-  const columns: Columns[] = [
+   const columns: Columns[] = [
     {
       title: 'Song1',
       dataIndex: 'name1',
       sorter: true,
       fixed: 'left',
+      width: 100,
       sortOrder: sortInfo.field == 'name1' && sortInfo.order,
     },
     {
       title: 'Song2',
+      width: 100,
       dataIndex: 'name2',
     },
     {
@@ -179,6 +193,14 @@ export default function Demo() {
     {
       title: 'Song4',
       dataIndex: 'name4',
+    },
+    {
+      title: 'Song5',
+      dataIndex: 'name5',
+    },
+    {
+      title: 'Song6',
+      dataIndex: 'name6',
     },
   ]
 
@@ -193,6 +215,8 @@ export default function Demo() {
             name2: `打回原形${size}`,
             name3: `防不胜防${size}`,
             name4: `十面埋伏${size}`,
+            name5: `k歌之王${size}`,
+            name6: `岁月如歌${size}`,
           })
         }
         resolve(list)
@@ -200,7 +224,7 @@ export default function Demo() {
     })
   }
 
-  const onLoad = async (e) => {
+  const onLoad = async e => {
     setLoadStatus('loading')
     const list = await getList()
     setDataSource(list)
@@ -211,7 +235,7 @@ export default function Demo() {
   const onSorter = ({ column, field, order }: SorterEvent) => {
     console.log(column, field, order)
     // 模拟排序加载效果
-    setLoading((state) => !state)
+    setLoading(state => !state)
     setSortInfo({ order, field })
     const tempList = [...dataSource]
     setTimeout(() => {
@@ -230,7 +254,7 @@ export default function Demo() {
       onLoad={onLoad}
       loadStatus={loadStatus}
       onSorter={onSorter}
-    />
+    ></Table>
   )
 }
 
