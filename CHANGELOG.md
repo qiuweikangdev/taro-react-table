@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/qiuweikangdev/taro-react-table/compare/taro-react-table-v1.6.2...taro-react-table-v1.7.0) (2022-11-27)
+
+
+### Bug Fixes
+
+* **table:** fixed column scrolling overlapping ([b5d6367](https://github.com/qiuweikangdev/taro-react-table/commit/b5d6367ce943764a69e1f9fd98242d554f690506))
+* **table:** uniform use Taro.pxTransform ([88d3d82](https://github.com/qiuweikangdev/taro-react-table/commit/88d3d823c14406c6d089e8aaa8cebc847feccaf1))
+
+
+###   Features
+
+* **table:** add size parameter spacing size ([f2ecadb](https://github.com/qiuweikangdev/taro-react-table/commit/f2ecadb3cab376e7173811fdb6b42758767de8c6))
+
 ### [1.6.2](https://github.com/qiuweikangdev/taro-react-table/compare/taro-react-table-v1.6.1...taro-react-table-v1.6.2) (2022-11-22)
 
 ### [1.6.1](https://github.com/qiuweikangdev/taro-react-table/compare/taro-react-table-v1.6.0...taro-react-table-v1.6.1) (2022-11-14)
