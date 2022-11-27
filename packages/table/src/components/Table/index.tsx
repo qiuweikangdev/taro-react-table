@@ -58,6 +58,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     cellEmptyText,
     renderEmpty,
     striped = false,
+    size = 'middle',
     ...props
   },
   ref,
@@ -190,6 +191,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
                     titleClassName={titleClassName}
                     titleStyle={titleStyle}
                     onTitleWidth={onTitleWidth}
+                    size={size}
                   />
                 )
               })}
@@ -227,6 +229,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
                   cellEmptyText={cellEmptyText}
                   striped={striped}
                   rowHeightMap={rowHeight}
+                  size={size}
                 />
               )
             })

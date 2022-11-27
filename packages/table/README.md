@@ -41,37 +41,39 @@ import 'taro-react-table/dist/index.css'
 
 ## Table
 
-| 参数              | 描述                                                         | 类型                               | 必传 | 默认值     |
-| ----------------- | ------------------------------------------------------------ | ---------------------------------- | ---- | ---------- |
-| 本身参数          | 参考[ScrollView](https://taro-docs.jd.com/taro/docs/components/viewContainer/scroll-view) |                                    |      |            |
-| `dataSource`      | 数据源                                                       | object[]                           | 是   | `[]`       |
-| `columns`         | 表格列的配置描述，具体项见下表                               | Columns[]                          | 是   | `[]`       |
-| `rowKey`          | 表格行 key 的取值，可以是字符串或一个函数                    | string \| function(record): string | 是   | `key`      |
-| `wrapperClass`    | 外层容器的类名                                               | string                             | 否   |            |
-| `wrapperStyle`    | 外层容器的样式                                               | object                             | 否   |            |
-| `className`       | ScrollView容器类名                                           | string                             | 否   |            |
-| `style`           | ScrollView容器样式                                           | object                             | 否   |            |
-| `rowClassName`    | 行类名                                                       | string                             | 否   |            |
-| `rowStyle`        | 行样式                                                       | object                             | 否   |            |
-| `colClassName`    | 单元格类名                                                   | string                             | 否   |            |
-| `colStyle`        | 单元格样式                                                   | object                             | 否   |            |
-| `titleStyle`      | 标题样式                                                     | object                             | 否   |            |
-| `titleClassName`  | 标题类名                                                     | string                             | 否   |            |
-| `titleClassName`  | 标题类名                                                     | string                             | 否   |            |
-| `loading`         | 是否显示加载                                                 | boolean                            | 否   |            |
-| `loadingText`     | 加载文本                                                     | string                             | 否   | ''         |
-| `loadStatus`      | 加载状态                                                     | loading \| noMore \| null          | 否   | null       |
-| `colWidth`        | 列宽度                                                       | *number*                           | 否   | 120        |
-| `unsort`          | 设置是否取消排序 (一般需求不需要取消排序，设置true可开启取消排序) | boolean                            | 否   | false      |
-| `showHeader`      | 是否显示表头                                                 | boolean                            | 否   | true       |
-| `noMoreText`      | loadStatus为noMore 状态显示文案                              | string                             | 否   | 没有更多了 |
-| `loadLoadingText` | loadStatus为loading 状态显示文案                             | string                             | 否   | 加载中...  |
-| `distance`        | 小于视窗距离多少开始触发onLoad                               | number                             | 否   | 30         |
-| `showLoad`        | 是否显示load加载状态，为false时不触发onLoad事件              | boolean                            | 否   | true       |
-| `fixedLoad`       | 是否固定加载更多，不随X轴滚动而滚动                          | boolean                            | 否   | true       |
-| `emptyText`       | 空数据显示文本                                               | string \| ReactNode                | 否   | 暂无数据   |
-| `cellEmptyText`   | 单元格空数据显示文本                                         | string                             | 否   | -          |
-| `renderEmpty`     | 自定义渲染空数据                                             | ReactNode                          | 否   |            |
+| 参数              | 描述                                                         | 类型                                     | 必传 | 默认值     |
+| ----------------- | ------------------------------------------------------------ | ---------------------------------------- | ---- | ---------- |
+| 本身参数          | 参考[ScrollView](https://taro-docs.jd.com/taro/docs/components/viewContainer/scroll-view) |                                          |      |            |
+| `dataSource`      | 数据源                                                       | object[]                                 | 是   | `[]`       |
+| `columns`         | 表格列的配置描述，具体项见下表                               | Columns[]                                | 是   | `[]`       |
+| `rowKey`          | 表格行 key 的取值，可以是字符串或一个函数                    | string \| function(record): string       | 是   | `key`      |
+| `wrapperClass`    | 外层容器的类名                                               | string                                   | 否   |            |
+| `wrapperStyle`    | 外层容器的样式                                               | object                                   | 否   |            |
+| `className`       | ScrollView容器类名                                           | string                                   | 否   |            |
+| `style`           | ScrollView容器样式                                           | object                                   | 否   |            |
+| `rowClassName`    | 行类名                                                       | string                                   | 否   |            |
+| `rowStyle`        | 行样式                                                       | object                                   | 否   |            |
+| `colClassName`    | 单元格类名                                                   | string                                   | 否   |            |
+| `colStyle`        | 单元格样式                                                   | object                                   | 否   |            |
+| `titleStyle`      | 标题样式                                                     | object                                   | 否   |            |
+| `titleClassName`  | 标题类名                                                     | string                                   | 否   |            |
+| `titleClassName`  | 标题类名                                                     | string                                   | 否   |            |
+| `loading`         | 是否显示加载                                                 | boolean                                  | 否   |            |
+| `loadingText`     | 加载文本                                                     | string                                   | 否   | ''         |
+| `loadStatus`      | 加载状态                                                     | loading \| noMore \| null                | 否   | null       |
+| `unsort`          | 设置是否取消排序 (一般需求不需要取消排序，设置true可开启取消排序) | boolean                                  | 否   | false      |
+| `showHeader`      | 是否显示表头                                                 | boolean                                  | 否   | true       |
+| `noMoreText`      | loadStatus为noMore 状态显示文案                              | string                                   | 否   | 没有更多了 |
+| `loadLoadingText` | loadStatus为loading 状态显示文案                             | string                                   | 否   | 加载中...  |
+| `distance`        | 小于视窗距离多少开始触发onLoad                               | number                                   | 否   | 30         |
+| `showLoad`        | 是否显示load加载状态，为false时不触发onLoad事件              | boolean                                  | 否   | true       |
+| `fixedLoad`       | 是否固定加载更多，不随X轴滚动而滚动                          | boolean                                  | 否   | true       |
+| `emptyText`       | 空数据显示文本                                               | string \| ReactNode                      | 否   | 暂无数据   |
+| `cellEmptyText`   | 单元格空数据显示文本                                         | string                                   | 否   | -          |
+| `renderEmpty`     | 自定义渲染空数据                                             | ReactNode                                | 否   |            |
+| `size`            | 间距大小                                                     | 'small' \| 'middle' \| 'large' \| number | 否   | middle     |
+
+
 
 
 

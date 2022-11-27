@@ -1,7 +1,7 @@
 import { memo, useContext } from 'react'
 import classNames from 'classnames'
 import { View, Text } from '@tarojs/components'
-import { calculateFixedDistance, getSize, isNil } from '../../utils'
+import { calculateFixedDistance, getNumberSize, getSize, isNil } from '../../utils'
 import { Columns, RowProps } from './types'
 import { TableContext } from '../../utils/context'
 import './index.less'
@@ -20,6 +20,7 @@ function Row(props: RowProps) {
     widthMap = {},
     striped = false,
     rowHeightMap = {},
+    size,
   } = props
 
   const { titleWidthMap } = useContext(TableContext)
@@ -59,6 +60,7 @@ function Row(props: RowProps) {
             })}
             style={{
               width: getSize(width),
+              padding: `${getSize(0)} ${getSize(getNumberSize(size))}`,
               textAlign: columnItem.align || 'center',
               height: rowHeightMap[`taro-table-row-${index}`]?.height,
               [columnItem.fixed as string]:

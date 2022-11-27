@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { Columns, Fixed, TitleRectType } from '../components/Table/types'
+import { Columns, Fixed, spaceSize, SpaceSize, TitleRectType } from '../components/Table/types'
 
 export const getSize = (size: string | number): string => {
   if (typeof size === 'number') {
@@ -55,4 +55,8 @@ export function pickValid(object: Record<string, unknown>) {
     }
   })
   return temp
+}
+
+export function getNumberSize(size: SpaceSize) {
+  return typeof size === 'string' ? spaceSize[size] : size || 0
 }

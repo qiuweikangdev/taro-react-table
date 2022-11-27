@@ -1,7 +1,7 @@
 import { memo, useRef, useEffect, useContext, useMemo } from 'react'
 import classNames from 'classnames'
 import { View, Text } from '@tarojs/components'
-import { calculateFixedDistance, getSize } from '../../utils'
+import { calculateFixedDistance, getNumberSize, getSize } from '../../utils'
 import { Columns, SortOrder, TitleProps } from './types'
 import { useQuery, useUniqueId } from '../../hooks'
 import { TaroElement } from '@tarojs/runtime'
@@ -21,6 +21,7 @@ function Title(props: TitleProps) {
     dataSource = [],
     onSorter,
     onTitleWidth,
+    size,
   } = props
 
   const { titleWidthMap = {} } = useContext(TableContext)
@@ -68,7 +69,6 @@ function Title(props: TitleProps) {
   const getTitleSize = async () => {
     if (titleRef.current) {
       const { width } = await getRefSize(titleRef.current)
-      console.log(width, 'width')
       onTitleWidth?.({ index, width: width })
     }
   }
@@ -97,6 +97,7 @@ function Title(props: TitleProps) {
         ...column.titleStyle,
         ...titleStyle,
         width: titleWidth,
+        padding: `${getSize(0)} ${getSize(getNumberSize(size))}`,
       }}
       key={column.key || column.dataIndex}
     >

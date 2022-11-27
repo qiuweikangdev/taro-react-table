@@ -75,6 +75,7 @@ export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
   cellEmptyText?: string
   renderEmpty?: ReactNode
   striped?: boolean
+  size?: SpaceSize
 }
 
 export type RowProps<T = unknown> = {
@@ -92,6 +93,7 @@ export type RowProps<T = unknown> = {
   widthMap?: Record<number, number>
   striped?: boolean
   rowHeightMap?: ElementRectType
+  size?: SpaceSize
 }
 
 export type TitleProps<T = unknown> = {
@@ -108,6 +110,7 @@ export type TitleProps<T = unknown> = {
   unsort?: boolean
   colWidth?: number
   onTitleWidth?: ({ index, width }: TitleRectType) => void
+  size?: SpaceSize
 }
 
 export type EmptyProps = {
@@ -119,4 +122,14 @@ export type EmptyProps = {
 export type TitleRectType = {
   index?: number
   width?: number
+}
+
+export type SizeType = 'small' | 'middle' | 'large' | undefined
+
+export type SpaceSize = SizeType | number
+
+export const spaceSize = {
+  small: 8,
+  middle: 16,
+  large: 24,
 }
