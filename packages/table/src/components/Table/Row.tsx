@@ -1,8 +1,9 @@
-import { memo } from 'react'
+import { memo, useContext } from 'react'
 import classNames from 'classnames'
 import { View, Text } from '@tarojs/components'
 import { calculateFixedDistance, getSize, isNil } from '../../utils'
 import { Columns, RowProps } from './types'
+import { TableContext } from '../../utils/context'
 import './index.less'
 
 function Row(props: RowProps) {
@@ -14,15 +15,18 @@ function Row(props: RowProps) {
     colStyle = {},
     columns,
     index,
-    colWidth = 0,
     cellEmptyText = '-',
     onRow,
     widthMap = {},
     striped = false,
+    rowHeightMap = {},
   } = props
+
+  const { titleWidthMap } = useContext(TableContext)
 
   return (
     <View
+      id={`taro-table-row-${index}`}
       className={classNames([
         'taro-table-row',
         rowClassName,
@@ -37,7 +41,7 @@ function Row(props: RowProps) {
         let width: string | number = widthMap[colIndex]
         let result
         if (columnItem.width) {
-          width = getSize(columnItem.width)
+          width = columnItem.width
         }
         if (columnItem.render) {
           const render = columnItem.render(text, dataSourceItem, index)
@@ -54,15 +58,16 @@ function Row(props: RowProps) {
               [colClassName]: true,
             })}
             style={{
+              width: getSize(width),
               textAlign: columnItem.align || 'center',
-              width,
+              height: rowHeightMap[`taro-table-row-${index}`]?.height,
               [columnItem.fixed as string]:
                 columnItem.fixed &&
                 calculateFixedDistance({
                   fixedType: columnItem.fixed,
                   index: colIndex,
                   columns,
-                  colWidth,
+                  titleWidthMap,
                 }),
               ...colStyle,
             }}

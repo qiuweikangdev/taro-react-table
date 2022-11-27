@@ -4,11 +4,16 @@ import { useCallback, useRef } from 'react'
 
 export type SelectorMethod = {
   getRefSize: getRefSizeType
+  getDoms: getDomsType
 }
+
+export type ElementRectType = Record<number | string, NodesRef.BoundingClientRectCallbackResult>
 
 export type getRefSizeType = (
   element: TaroElement | HTMLElement,
 ) => Promise<NodesRef.BoundingClientRectCallbackResult>
+
+export type getDomsType = (ids: string[]) => Promise<ElementRectType>
 
 function useQuery(): [SelectorQuery, SelectorMethod] {
   const query = useRef<SelectorQuery>(createSelectorQuery())
@@ -40,10 +45,35 @@ function useQuery(): [SelectorQuery, SelectorMethod] {
     [querySelector],
   )
 
+  const getDoms = useCallback<getDomsType>(
+    (ids: string[]) => {
+      return new Promise((resolve, reject) => {
+        if (!ids.length) {
+          reject({})
+        } else {
+          try {
+            const domsMap: ElementRectType = {}
+            ids.forEach((id: string) => {
+              const selectorQuery = querySelector('#' + id).boundingClientRect((result) => {
+                domsMap[id] = result
+              })
+              selectorQuery.exec()
+            })
+            resolve(domsMap)
+          } catch (e) {
+            reject(e)
+          }
+        }
+      })
+    },
+    [querySelector],
+  )
+
   return [
     query.current,
     {
       getRefSize,
+      getDoms,
     },
   ]
 }

@@ -1,4 +1,5 @@
 import { CommonEventFunction, ScrollViewProps } from '@tarojs/components'
+import { ElementRectType } from '../../hooks/useQuery'
 import { CSSProperties, ReactNode } from 'react'
 
 export type ScrollDetail = {
@@ -60,7 +61,6 @@ export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
   loading?: boolean
   loadingText?: string
   loadStatus?: LoadStatus
-  colWidth?: number
   onLoad?: CommonEventFunction
   onSorter?: ({ column, field, order }: SorterEvent) => void
   unsort?: boolean
@@ -87,11 +87,11 @@ export type RowProps<T = unknown> = {
   colClassName?: string
   bordered?: boolean
   borderBottom?: boolean
-  colWidth?: number
   onRow?: (record: T, index: number) => void
   cellEmptyText?: string
   widthMap?: Record<number, number>
   striped?: boolean
+  rowHeightMap?: ElementRectType
 }
 
 export type TitleProps<T = unknown> = {
@@ -107,11 +107,16 @@ export type TitleProps<T = unknown> = {
   onSorter?: ({ column, field, order }: SorterEvent) => void
   unsort?: boolean
   colWidth?: number
-  onTitleWidth?: ({ index, width }: Record<'index' | 'width', number>) => void
+  onTitleWidth?: ({ index, width }: TitleRectType) => void
 }
 
 export type EmptyProps = {
   text?: string
   fixedEmpty?: boolean
   renderEmpty?: ReactNode
+}
+
+export type TitleRectType = {
+  index?: number
+  width?: number
 }

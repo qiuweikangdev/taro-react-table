@@ -7,17 +7,21 @@ import {
   ForwardRefRenderFunction,
   useCallback,
   useEffect,
+  useMemo,
 } from 'react'
 import classNames from 'classnames'
 import { nextTick } from '@tarojs/taro'
-import { BaseEventOrig, ScrollView, ScrollViewProps, View } from '@tarojs/components'
+import { BaseEventOrig, ITouchEvent, ScrollView, ScrollViewProps, View } from '@tarojs/components'
 import Row from './Row'
 import Title from './Title'
 import Empty from './Empty'
 import Loading from '../Loading'
 import LoadMore from '../LoadMore'
 import { useQuery, useUpdateState, useUniqueId, useRendered } from '../../hooks'
-import { ScrollDetail, LoadStatus, DataSource, TableProps, Columns } from './types'
+import { ScrollDetail, LoadStatus, DataSource, TableProps, Columns, TitleRectType } from './types'
+import { TableContext } from '../../utils/context'
+import { pickValid } from '../../utils'
+import { ElementRectType } from '../../hooks/useQuery'
 import './index.less'
 
 const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
@@ -39,7 +43,6 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     wrapperStyle = {},
     loadStatus: pLoadStatus = null,
     loading = false,
-    colWidth = 120,
     onLoad,
     onSorter,
     unsort = false, // 设置取消排序 【一般需求不需要取消排序，设置true可开启取消排序】
@@ -68,12 +71,13 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     scrollHeight: 0,
     scrollTop: 0,
   })
-  const [titleWidthMap, setTitleWidthMap] = useState({})
+  const [titleWidthMap, setTitleWidthMap] = useState<TitleRectType>({})
   const [dataSource, setDataSource] = useUpdateState<unknown[]>(pDataSource)
   const [columns, setColumns] = useUpdateState<Columns[]>(pColumns)
   const [loadStatus] = useUpdateState<LoadStatus>(pLoadStatus)
   const [scrollDistance, setScrollDistance] = useState<number>(0)
-  const [, { getRefSize }] = useQuery()
+  const [rowHeight, setRowHeight] = useState<ElementRectType>({})
+  const [, { getRefSize, getDoms }] = useQuery()
   const genId = useUniqueId()
 
   // scroll load
@@ -105,6 +109,16 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
       scrollDetailRef.current = { scrollTop, scrollHeight, scrollLeft }
       props?.onScroll?.(e)
     }
+  }
+
+  const onTouchStart = async (e: ITouchEvent) => {
+    //  fix: 固定列滚动问题重叠
+    const rowIds = Array.from(Array(dataSource.length), (v, k) => k).map(
+      (index) => `taro-table-row-${index}`,
+    )
+    const rowHeightMap = await getDoms(rowIds)
+    setRowHeight(rowHeightMap)
+    props?.onTouchStart?.(e)
   }
 
   // set fixed width
@@ -140,6 +154,14 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
     setTitleWidthMap((state) => ({ ...state, [index]: width }))
   }
 
+  const genTitleMap = useMemo(() => {
+    const getColumnsWidth = columns.reduce(
+      (acc, cur, index) => ({ ...acc, [index]: cur.width }),
+      {},
+    )
+    return { ...titleWidthMap, ...pickValid(getColumnsWidth) }
+  }, [columns, titleWidthMap])
+
   const renderTableHead = useRendered(() => {
     return (
       showHeader &&
@@ -163,7 +185,6 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
                     onSorter={onSorter}
                     unsort={unsort}
                     index={index}
-                    colWidth={colWidth}
                     setDataSource={setDataSource}
                     dataSource={dataSource}
                     titleClassName={titleClassName}
@@ -202,10 +223,10 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
                   dataSourceItem={item}
                   index={index}
                   widthMap={titleWidthMap}
-                  colWidth={colWidth}
                   onRow={onRow}
                   cellEmptyText={cellEmptyText}
                   striped={striped}
+                  rowHeightMap={rowHeight}
                 />
               )
             })
@@ -246,30 +267,33 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   useImperativeHandle(ref, () => ({ scrollRef, scrollDistance }))
 
   return (
-    <View className={classNames(['taro-table-wrapper', wrapperClass])} style={wrapperStyle}>
-      {loading && (
-        <View className='taro-table-loading'>
-          <Loading text={loadingText} />
-        </View>
-      )}
-      <ScrollView
-        {...props}
-        ref={scrollRef}
-        className={classNames(['taro-table-scroll', className])}
-        scrollX={scrollX}
-        scrollY={scrollY}
-        style={{ ...style, overflow: 'auto' }}
-        onScrollToLower={onScrollToLower}
-        onScroll={onScroll}
-        id={genId('taro-table-scroll')}
-      >
-        <View className='taro-table-content-wrapper'>
-          {renderTableHead}
-          {renderTableBody}
-          {renderTableLoad}
-        </View>
-      </ScrollView>
-    </View>
+    <TableContext.Provider value={{ titleWidthMap: genTitleMap }}>
+      <View className={classNames(['taro-table-wrapper', wrapperClass])} style={wrapperStyle}>
+        {loading && (
+          <View className='taro-table-loading'>
+            <Loading text={loadingText} />
+          </View>
+        )}
+        <ScrollView
+          {...props}
+          ref={scrollRef}
+          className={classNames(['taro-table-scroll', className])}
+          scrollX={scrollX}
+          scrollY={scrollY}
+          style={{ ...style, overflow: 'auto' }}
+          onScrollToLower={onScrollToLower}
+          onScroll={onScroll}
+          id={genId('taro-table-scroll')}
+          onTouchStart={onTouchStart}
+        >
+          <View className='taro-table-content-wrapper'>
+            {renderTableHead}
+            {renderTableBody}
+            {renderTableLoad}
+          </View>
+        </ScrollView>
+      </View>
+    </TableContext.Provider>
   )
 }
 
