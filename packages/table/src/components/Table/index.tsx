@@ -11,7 +11,7 @@ import {
 } from 'react'
 import classNames from 'classnames'
 import { nextTick } from '@tarojs/taro'
-import { BaseEventOrig, ITouchEvent, ScrollView, ScrollViewProps, View } from '@tarojs/components'
+import { BaseEventOrig, ScrollView, ScrollViewProps, View } from '@tarojs/components'
 import Row from './Row'
 import Title from './Title'
 import Empty from './Empty'
@@ -21,7 +21,6 @@ import { useQuery, useUpdateState, useUniqueId, useRendered } from '../../hooks'
 import { ScrollDetail, LoadStatus, DataSource, TableProps, Columns, TitleRectType } from './types'
 import { TableContext } from '../../utils/context'
 import { getSize, pickValid } from '../../utils'
-import { ElementRectType } from '../../hooks/useQuery'
 import './index.less'
 
 const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
@@ -77,8 +76,7 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
   const [columns, setColumns] = useUpdateState<Columns[]>(pColumns)
   const [loadStatus] = useUpdateState<LoadStatus>(pLoadStatus)
   const [scrollDistance, setScrollDistance] = useState<number>(0)
-  const [rowHeight, setRowHeight] = useState<ElementRectType>({})
-  const [, { getRefSize, getDoms }] = useQuery()
+  const [, { getRefSize }] = useQuery()
   const genId = useUniqueId()
 
   // scroll load
@@ -110,16 +108,6 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
       scrollDetailRef.current = { scrollTop, scrollHeight, scrollLeft }
       props?.onScroll?.(e)
     }
-  }
-
-  const onTouchStart = async (e: ITouchEvent) => {
-    //  fix: 固定列滚动问题重叠
-    const rowIds = Array.from(Array(dataSource.length), (v, k) => k).map(
-      (index) => `taro-table-row-${index}`,
-    )
-    const rowHeightMap = await getDoms(rowIds)
-    setRowHeight(rowHeightMap)
-    props?.onTouchStart?.(e)
   }
 
   // set fixed width
@@ -228,7 +216,6 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
                   onRow={onRow}
                   cellEmptyText={cellEmptyText}
                   striped={striped}
-                  rowHeightMap={rowHeight}
                   size={size}
                 />
               )
@@ -287,7 +274,6 @@ const Table: ForwardRefRenderFunction<any, TableProps<unknown>> = (
           onScrollToLower={onScrollToLower}
           onScroll={onScroll}
           id={genId('taro-table-scroll')}
-          onTouchStart={onTouchStart}
         >
           <View className='taro-table-content-wrapper'>
             {renderTableHead}

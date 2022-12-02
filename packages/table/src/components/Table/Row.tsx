@@ -19,7 +19,6 @@ function Row(props: RowProps) {
     onRow,
     widthMap = {},
     striped = false,
-    rowHeightMap = {},
     size,
   } = props
 
@@ -62,7 +61,6 @@ function Row(props: RowProps) {
               width: getSize(width),
               padding: `${getSize(0)} ${getSize(getNumberSize(size))}`,
               textAlign: columnItem.align || 'center',
-              height: rowHeightMap[`taro-table-row-${index}`]?.height,
               [columnItem.fixed as string]:
                 columnItem.fixed &&
                 calculateFixedDistance({

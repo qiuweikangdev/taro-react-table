@@ -1,5 +1,4 @@
 import { CommonEventFunction, ScrollViewProps } from '@tarojs/components'
-import { ElementRectType } from '../../hooks/useQuery'
 import { CSSProperties, ReactNode } from 'react'
 
 export type ScrollDetail = {
@@ -92,7 +91,6 @@ export type RowProps<T = unknown> = {
   cellEmptyText?: string
   widthMap?: Record<number, number>
   striped?: boolean
-  rowHeightMap?: ElementRectType
   size?: SpaceSize
 }
 
