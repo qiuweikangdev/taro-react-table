@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { Columns, Fixed, spaceSize, SpaceSize, TitleRectType } from '../components/Table/types'
+import { Columns, Fixed, spaceSize, SpaceSize } from '../components/Table/types'
 
 export const getSize = (size: string | number): string => {
   if (typeof size === 'number') {
@@ -16,15 +16,15 @@ export function calculateFixedDistance(options: {
   fixedType: Fixed
   index: number
   columns: Columns[]
-  titleWidthMap?: TitleRectType
+  colWidth: number
 }) {
-  const { fixedType, index, columns, titleWidthMap } = options
+  const { fixedType, index, columns, colWidth = 0 } = options
   let result = 0
-  if (fixedType === 'left' && titleWidthMap) {
+  if (fixedType === 'left') {
     // 计算当前列之前的列宽度总和
     result = columns.reduce((acc, cur, i) => {
       if (i + 1 <= index) {
-        return acc + titleWidthMap[i]
+        return acc + (cur.width || colWidth)
       } else {
         return acc
       }
@@ -32,8 +32,8 @@ export function calculateFixedDistance(options: {
   } else {
     result = columns.reduceRight((acc, cur, i) => {
       // 计算当前列之后的列宽度总和
-      if (i - 1 >= index && titleWidthMap) {
-        return acc + titleWidthMap[i]
+      if (i - 1 >= index) {
+        return acc + (cur.width || colWidth)
       } else {
         return acc
       }

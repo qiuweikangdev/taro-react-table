@@ -72,8 +72,7 @@ import 'taro-react-table/dist/index.css'
 | `cellEmptyText`   | 单元格空数据显示文本                                         | string                                   | 否   | -          |
 | `renderEmpty`     | 自定义渲染空数据                                             | ReactNode                                | 否   |            |
 | `size`            | 间距大小                                                     | 'small' \| 'middle' \| 'large' \| number | 否   | middle     |
-
-
+| `colWidth`        | 默认列宽度                                                   | number                                   | 否   | 120        |
 
 
 

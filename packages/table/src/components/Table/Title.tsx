@@ -1,11 +1,10 @@
-import { memo, useRef, useEffect, useContext, useMemo } from 'react'
+import { memo, useRef, useMemo } from 'react'
 import classNames from 'classnames'
 import { View, Text } from '@tarojs/components'
 import { calculateFixedDistance, getNumberSize, getSize } from '../../utils'
 import { Columns, SortOrder, TitleProps } from './types'
-import { useQuery, useUniqueId } from '../../hooks'
+import { useUniqueId } from '../../hooks'
 import { TaroElement } from '@tarojs/runtime'
-import { TableContext } from '../../utils/context'
 import './index.less'
 
 function Title(props: TitleProps) {
@@ -20,13 +19,10 @@ function Title(props: TitleProps) {
     setDataSource,
     dataSource = [],
     onSorter,
-    onTitleWidth,
     size,
+    colWidth,
   } = props
 
-  const { titleWidthMap = {} } = useContext(TableContext)
-
-  const [, { getRefSize }] = useQuery()
   const genId = useUniqueId()
   const titleRef = useRef<TaroElement | HTMLElement>(null)
 
@@ -62,21 +58,10 @@ function Title(props: TitleProps) {
     }
   }
 
-  useEffect(() => {
-    getTitleSize()
-  }, [column])
-
-  const getTitleSize = async () => {
-    if (titleRef.current) {
-      const { width } = await getRefSize(titleRef.current)
-      onTitleWidth?.({ index, width: width })
-    }
-  }
-
   const titleWidth = useMemo(() => {
-    const width = column.width || titleWidthMap[index]
+    const width = column.width || colWidth
     return getSize(width)
-  }, [column.width, titleWidthMap, index])
+  }, [column.width, index, colWidth])
 
   return (
     <View
@@ -92,7 +77,7 @@ function Title(props: TitleProps) {
             fixedType: column.fixed,
             index,
             columns,
-            titleWidthMap,
+            colWidth,
           }),
         ...column.titleStyle,
         ...titleStyle,

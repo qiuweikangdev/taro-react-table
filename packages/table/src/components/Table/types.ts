@@ -75,6 +75,7 @@ export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
   renderEmpty?: ReactNode
   striped?: boolean
   size?: SpaceSize
+  colWidth?: number
 }
 
 export type RowProps<T = unknown> = {
@@ -92,6 +93,7 @@ export type RowProps<T = unknown> = {
   widthMap?: Record<number, number>
   striped?: boolean
   size?: SpaceSize
+  colWidth: number
 }
 
 export type TitleProps<T = unknown> = {
@@ -106,8 +108,7 @@ export type TitleProps<T = unknown> = {
   titleClassName?: string
   onSorter?: ({ column, field, order }: SorterEvent) => void
   unsort?: boolean
-  colWidth?: number
-  onTitleWidth?: ({ index, width }: TitleRectType) => void
+  colWidth: number
   size?: SpaceSize
 }
 
@@ -115,11 +116,6 @@ export type EmptyProps = {
   text?: string
   fixedEmpty?: boolean
   renderEmpty?: ReactNode
-}
-
-export type TitleRectType = {
-  index?: number
-  width?: number
 }
 
 export type SizeType = 'small' | 'middle' | 'large' | undefined

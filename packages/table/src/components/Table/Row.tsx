@@ -1,9 +1,8 @@
-import { memo, useContext } from 'react'
+import { memo } from 'react'
 import classNames from 'classnames'
 import { View, Text } from '@tarojs/components'
 import { calculateFixedDistance, getNumberSize, getSize, isNil } from '../../utils'
 import { Columns, RowProps } from './types'
-import { TableContext } from '../../utils/context'
 import './index.less'
 
 function Row(props: RowProps) {
@@ -17,12 +16,10 @@ function Row(props: RowProps) {
     index,
     cellEmptyText = '-',
     onRow,
-    widthMap = {},
     striped = false,
     size,
+    colWidth,
   } = props
-
-  const { titleWidthMap } = useContext(TableContext)
 
   return (
     <View
@@ -38,7 +35,7 @@ function Row(props: RowProps) {
     >
       {columns.map((columnItem: Columns, colIndex: number): JSX.Element => {
         const text = dataSourceItem[columnItem.dataIndex]
-        let width: string | number = widthMap[colIndex]
+        let width: string | number = colWidth
         let result
         if (columnItem.width) {
           width = columnItem.width
@@ -67,7 +64,7 @@ function Row(props: RowProps) {
                   fixedType: columnItem.fixed,
                   index: colIndex,
                   columns,
-                  titleWidthMap,
+                  colWidth,
                 }),
               ...colStyle,
             }}
