@@ -1,5 +1,5 @@
 import { CommonEventFunction, ScrollViewProps } from '@tarojs/components'
-import { CSSProperties, ReactNode } from 'react'
+import { CSSProperties, ReactNode, RefObject } from 'react'
 
 export type ScrollDetail = {
   scrollLeft: number
@@ -43,6 +43,13 @@ export type Columns<T = unknown> = {
   ellipsis?: boolean
 }
 
+export type TableHandle = {
+  scrollRef: RefObject<HTMLElement>
+  scrollDistance: number
+}
+
+export type StripedType = 'odd' | 'even' | boolean
+
 export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
   dataSource: T[]
   columns: Columns<T>[]
@@ -73,7 +80,7 @@ export type TableProps<T = unknown> = Omit<ScrollViewProps, 'style'> & {
   emptyText?: string
   cellEmptyText?: string
   renderEmpty?: ReactNode
-  striped?: boolean
+  striped?: StripedType
   size?: SpaceSize
   colWidth?: number
 }
@@ -91,7 +98,7 @@ export type RowProps<T = unknown> = {
   onRow?: (record: T, index: number) => void
   cellEmptyText?: string
   widthMap?: Record<number, number>
-  striped?: boolean
+  striped?: StripedType
   size?: SpaceSize
   colWidth: number
 }

@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import classNames from 'classnames'
 import { View, Text } from '@tarojs/components'
-import { calculateFixedDistance, getNumberSize, getSize, isNil } from '../../utils'
+import { calculateFixedDistance, getNumberSize, getSize, isNil, showStriped } from '../../utils'
 import { Columns, RowProps } from './types'
 import './index.less'
 
@@ -24,13 +24,7 @@ function Row(props: RowProps) {
   return (
     <View
       id={`taro-table-row-${index}`}
-      className={classNames([
-        'taro-table-row',
-        rowClassName,
-        {
-          ['taro-table-row-striped']: striped,
-        },
-      ])}
+      className={classNames(['taro-table-row', rowClassName])}
       style={rowStyle}
     >
       {columns.map((columnItem: Columns, colIndex: number): JSX.Element => {
@@ -51,7 +45,8 @@ function Row(props: RowProps) {
           <View
             key={columnItem.key || columnItem.dataIndex}
             className={classNames(['taro-table-col'], {
-              'taro-table-col-fixed': columnItem.fixed,
+              ['taro-table-col-fixed']: columnItem.fixed,
+              ['taro-table-col-striped']: showStriped(striped, index),
               [colClassName]: true,
             })}
             style={{

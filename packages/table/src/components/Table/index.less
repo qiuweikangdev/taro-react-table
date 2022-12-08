@@ -91,10 +91,6 @@
         position: relative;
         margin:20px 0px;
 
-        &-striped:nth-child(even) {
-          background-color: @striped-color;
-        }
-
         .taro-table-col {
           display: flex;
           align-items: center;
@@ -103,6 +99,9 @@
           padding: 10px 0px;
           background-color: #fff;
           box-sizing: border-box;
+          &-striped {
+            background-color: @striped-color;
+          }
 
           &-text {
             &-ellipsis {

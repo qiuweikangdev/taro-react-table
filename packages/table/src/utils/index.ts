@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { Columns, Fixed, spaceSize, SpaceSize } from '../components/Table/types'
+import { Columns, Fixed, spaceSize, SpaceSize, StripedType } from '../components/Table/types'
 
 export const getSize = (size: string | number): string => {
   if (typeof size === 'number') {
@@ -59,4 +59,11 @@ export function pickValid(object: Record<string, unknown>) {
 
 export function getNumberSize(size: SpaceSize) {
   return typeof size === 'string' ? spaceSize[size] : size || 0
+}
+
+export function showStriped(striped: StripedType = false, index) {
+  if ([true, 'even'].includes(striped)) {
+    return index % 2 !== 0
+  }
+  return striped === 'odd' && index % 2 == 0
 }
