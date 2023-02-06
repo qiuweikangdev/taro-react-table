@@ -65,14 +65,14 @@ function Row(props: RowProps) {
             }}
             onClick={() => onRow?.(dataSourceItem, index)}
           >
-            <Text
+            <View
               className={classNames('taro-table-col-text', {
                 'taro-table-col-text-ellipsis': columnItem.ellipsis,
               })}
               onClick={() => columnItem?.onCell?.(dataSourceItem, index)}
             >
               {result}
-            </Text>
+            </View>
           </View>
         )
       })}
