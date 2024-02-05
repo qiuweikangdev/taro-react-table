@@ -1,4 +1,4 @@
-// update echarts package.json
+// update table package.json
 
 const pkg = require('../packages/table/package.json')
 const { writeFileSync } = require('fs')
