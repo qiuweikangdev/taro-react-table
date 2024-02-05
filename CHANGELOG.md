@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.5](https://github.com/qiuweikangdev/taro-react-table/compare/taro-react-table-v1.7.4...taro-react-table-v1.7.5) (2024-02-05)
+
+### Bug Fixes
+
+- 表格滚动性能优化 ([b125379](https://github.com/qiuweikangdev/taro-react-table/commit/b12537926f2bf34508eddc9e80d2fc4f8de1ea5a))
+
+### Features
+
+- update-pkg ([194e049](https://github.com/qiuweikangdev/taro-react-table/commit/194e049bed03f85f70b88a387332838cc17e92e8))
+
 ### [1.7.4](https://github.com/qiuweikangdev/taro-react-table/compare/taro-react-table-v1.7.3...taro-react-table-v1.7.4) (2023-02-06)
 
 ### [1.7.3](https://github.com/qiuweikangdev/taro-react-table/compare/taro-react-table-v1.7.2...taro-react-table-v1.7.3) (2022-12-08)
