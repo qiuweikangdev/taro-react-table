@@ -73,7 +73,7 @@ const Table: ForwardRefRenderFunction<TableHandle, TableProps<unknown>> = (
   const [dataSource, setDataSource] = useUpdateState<unknown[]>(pDataSource)
   const [columns, setColumns] = useUpdateState<Columns[]>(pColumns)
   const [loadStatus] = useUpdateState<LoadStatus>(pLoadStatus)
-  const [scrollDistance, setScrollDistance] = useState<number>(0)
+  const scrollDistanceRef = useRef(0)
   const [, { getRefSize }] = useQuery()
   const genId = useUniqueId()
 
@@ -102,7 +102,7 @@ const Table: ForwardRefRenderFunction<TableHandle, TableProps<unknown>> = (
       const { scrollTop, scrollHeight, scrollLeft } = e.detail
       const { height: tableHeight } = await getRefSize(scrollRef.current)
       const diff = scrollHeight - (Math.round(scrollTop) + tableHeight)
-      setScrollDistance(diff)
+      scrollDistanceRef.current = diff
       scrollDetailRef.current = { scrollTop, scrollHeight, scrollLeft }
       props?.onScroll?.(e)
     }
@@ -241,7 +241,7 @@ const Table: ForwardRefRenderFunction<TableHandle, TableProps<unknown>> = (
     }
   }, [columns, dataSource, onScrollFixed])
 
-  useImperativeHandle(ref, () => ({ scrollRef, scrollDistance }))
+  useImperativeHandle(ref, () => ({ scrollRef, scrollDistance: scrollDistanceRef.current }))
 
   return (
     <View className={classNames(['taro-table-wrapper', wrapperClass])} style={wrapperStyle}>
