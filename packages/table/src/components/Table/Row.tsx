@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import classNames from 'classnames'
-import { View, Text } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { calculateFixedDistance, getNumberSize, getSize, isNil, showStriped } from '../../utils'
 import { Columns, RowProps } from './types'
 import './index.less'
